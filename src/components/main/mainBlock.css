@@ -1,0 +1,15 @@
+.tasks-block {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 100px;
+  flex-wrap: wrap;
+}
+
+.task-title {
+  height: 19px;
+  font-weight: 700;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: #455266;
+  padding: 10px;
+}
