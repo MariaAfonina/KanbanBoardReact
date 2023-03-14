@@ -14,7 +14,7 @@
   margin-bottom: 7px;
 }
 
-.task-discription {
+.task-description {
   font-weight: 400;
   font-size: 12px;
   padding-bottom: 10px;
@@ -32,15 +32,6 @@
   display: flex;
   margin-bottom: 10px;
   align-items: center;
-}
-
-.button-close {
-  font-weight: 700;
-  font-size: 16px;
-  color: #a80f0f;
-  background: none;
-  border: none;
-  cursor: pointer;
 }
 
 .btn-close-wrapper {

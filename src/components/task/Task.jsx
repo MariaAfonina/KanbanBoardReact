@@ -1,13 +1,29 @@
 import "./task.css";
-import ButtonDelete from "../buttons/ButtonDelete";
+import DeleteTask from "../buttons/DeleteTask";
 
 const Task = ({ task }) => {
+  function editTask(e) {
+    e.preventDefault();
+  }
+
+  let priorityStyle;
+
+  if (task.priority === "High") {
+    priorityStyle = "priority-value priority-value-high";
+  }
+  if (task.priority === "Medium") {
+    priorityStyle = "priority-value priority-value-medium";
+  }
+  if (task.priority === "Low") {
+    priorityStyle = "priority-value priority-value-low";
+  }
+
   return (
     task && (
       <div id={task.id} className="task" draggable="true">
         <div className="btn-close-wrapper">
           <div className="task-name">{task.title}</div>
-          <ButtonDelete taskId={task.id} />
+          <DeleteTask taskId={task.id} />
         </div>
 
         <div className="task-description">{task.description}</div>
@@ -18,7 +34,7 @@ const Task = ({ task }) => {
 
         <div className="task-wrapper">
           <div className="task-parameter">Priority:</div>
-          <div className="priority-value">{task.priority}</div>
+          <div className={priorityStyle}>{task.priority}</div>
         </div>
 
         <div className="task-wrapper">
@@ -28,7 +44,7 @@ const Task = ({ task }) => {
 
         <div className="tag-edit-wrapper">
           <button className="btn-tag">+Tag</button>
-          <button className="btn-edit">
+          <button className="btn-edit" onClick={editTask}>
             <i className="fa-solid fa-pen"></i>
           </button>
         </div>
