@@ -1,8 +1,8 @@
 import "./header.css";
 
-const Header = ({ onSubmit }) => {
+const Header = ({ isForm }) => {
   function openForm() {
-    onSubmit();
+    isForm();
   }
 
   return (

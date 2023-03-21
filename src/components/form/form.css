@@ -8,6 +8,12 @@
   background: rgba(86, 86, 86, 0.3);
 }
 
+.form-btn-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+}
+
 .add-form {
   display: flex;
   flex-direction: column;

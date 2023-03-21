@@ -1,3 +1,5 @@
+import "./arrow.css";
+
 const Arrow = () => {
   function openDropdown(e) {
     e.preventDefault();

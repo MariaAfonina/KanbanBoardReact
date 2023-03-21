@@ -1,10 +1,10 @@
-import Arrow from "../buttons/Arrow";
+import Arrow from "../arrow/Arrow";
 import "./dropdowns.css";
 import Value from "./Value";
 import { useState } from "react";
 
-const Assigned = ({ setValue }) => {
-  const [assigned, setAssigned] = useState("");
+const Assigned = ({ value, setValue }) => {
+  const [assigned, setAssigned] = useState(value);
 
   function chooseValue(name) {
     setAssigned(name);

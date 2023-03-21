@@ -1,9 +1,10 @@
 import "./task.css";
-import DeleteTask from "../buttons/DeleteTask";
 
-const Task = ({ task }) => {
-  function editTask(e) {
+const Task = ({ task, isForm, editTask, onTaskDelete }) => {
+  function isFormEditTask(e) {
     e.preventDefault();
+    isForm();
+    editTask(task.id);
   }
 
   let priorityStyle;
@@ -23,7 +24,14 @@ const Task = ({ task }) => {
       <div id={task.id} className="task" draggable="true">
         <div className="btn-close-wrapper">
           <div className="task-name">{task.title}</div>
-          <DeleteTask taskId={task.id} />
+          <button
+            className="button-delete"
+            onClick={() => {
+              onTaskDelete(task.id);
+            }}
+          >
+            <i className="fa-solid fa-xmark"></i>
+          </button>
         </div>
 
         <div className="task-description">{task.description}</div>
@@ -44,7 +52,7 @@ const Task = ({ task }) => {
 
         <div className="tag-edit-wrapper">
           <button className="btn-tag">+Tag</button>
-          <button className="btn-edit" onClick={editTask}>
+          <button className="btn-edit" onClick={isFormEditTask}>
             <i className="fa-solid fa-pen"></i>
           </button>
         </div>

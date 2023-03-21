@@ -39,6 +39,15 @@
   justify-content: space-between;
 }
 
+.button-delete {
+  font-weight: 700;
+  font-size: 16px;
+  color: #a80f0f;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
 .assigned-value {
   color: #000000;
   font-weight: 400;

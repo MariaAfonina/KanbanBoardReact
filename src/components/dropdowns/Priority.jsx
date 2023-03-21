@@ -1,15 +1,16 @@
 import "./dropdowns.css";
-import Arrow from "../buttons/Arrow";
+import Arrow from "../arrow/Arrow";
 import Value from "./Value";
 import { useState } from "react";
 
-const Priority = ({ setValue }) => {
-  const [priority, setPriority] = useState("");
+const Priority = ({ value, setValue }) => {
+  const [priority, setPriority] = useState(value);
 
   function chooseValue(name) {
     setPriority(name);
     setValue(name);
   }
+
   return (
     <div className="add-form-parameter">
       <label>Priority</label>
