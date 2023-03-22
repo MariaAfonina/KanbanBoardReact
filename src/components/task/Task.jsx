@@ -15,13 +15,21 @@ const Task = ({ task, isForm, editTask, onTaskDelete }) => {
   if (task.priority === "Medium") {
     priorityStyle = "priority-value priority-value-medium";
   }
-  if (task.priority === "Low") {
+  if (task.priori === "Low") {
     priorityStyle = "priority-value priority-value-low";
   }
 
   return (
     task && (
-      <div id={task.id} className="task" draggable="true">
+      <div
+        onDragStart={(event) => {
+          event.dataTransfer.setData("id", task.id);
+          event.dataTransfer.setData("data-task-group-status", task.status);
+        }}
+        id={task.id}
+        className="task"
+        draggable={true}
+      >
         <div className="btn-close-wrapper">
           <div className="task-name">{task.title}</div>
           <button

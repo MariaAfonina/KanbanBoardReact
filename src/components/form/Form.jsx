@@ -5,19 +5,30 @@ import Input from "../input/Input";
 import Assigned from "../dropdowns/Assigned";
 import Priority from "../dropdowns/Priority";
 
+const defaultTask = {
+  id: "",
+  status: "tasksBacklog",
+  title: "",
+  description: "",
+  assigned: "",
+  priority: "",
+  date: "",
+};
+
 const Form = ({ isForm, taskToEdit, setTaskToEdit, backlog, setBacklog }) => {
-  const [id, setId] = useState(taskToEdit ? taskToEdit.id : "");
-  const [title, setTitle] = useState(taskToEdit ? taskToEdit.title : "");
-  const [description, setDescription] = useState(
-    taskToEdit ? taskToEdit.description : ""
-  );
-  const [assigned, setAssigned] = useState(
-    taskToEdit ? taskToEdit.assigned : ""
-  );
-  const [priority, setPriority] = useState(
-    taskToEdit ? taskToEdit.priority : ""
-  );
-  const [date, setDate] = useState(taskToEdit ? taskToEdit.date : "");
+  const [task, setTask] = useState({
+    id: taskToEdit ? taskToEdit.id : "",
+    status: taskToEdit ? taskToEdit.status : "backlog",
+    title: taskToEdit ? taskToEdit.title : "",
+    description: taskToEdit ? taskToEdit.description : "",
+    assigned: taskToEdit ? taskToEdit.assigned : "",
+    priority: taskToEdit ? taskToEdit.priority : "",
+    date: taskToEdit ? taskToEdit.date : "",
+  });
+
+  function updateTaskField(fieldName, value) {
+    setTask({ ...task, [fieldName]: value });
+  }
 
   function addTask(e) {
     e.preventDefault();
@@ -26,33 +37,31 @@ const Form = ({ isForm, taskToEdit, setTaskToEdit, backlog, setBacklog }) => {
       ...backlog,
       {
         id: uuidv4(),
-        title: title,
-        description: description,
-        assigned: assigned,
-        priority: priority,
-        date: date,
+        status: task.status,
+        title: task.title,
+        description: task.description,
+        assigned: task.assigned,
+        priority: task.priority,
+        date: task.date,
       },
     ];
     localStorage.setItem("tasksBacklog", JSON.stringify(updatedStorage));
-    setId("");
-    setTitle("");
-    setDescription("");
-    setAssigned("");
-    setPriority("");
-    setDate("");
+    setTask(defaultTask);
     setBacklog(JSON.parse(localStorage.getItem("tasksBacklog")) || []);
   }
 
   function updateTask(e) {
     e.preventDefault();
-    const task = backlog[backlog.findIndex((task) => task.id === id)];
 
-    task.id = id;
-    task.title = title;
-    task.description = description;
-    task.assigned = assigned;
-    task.priority = priority;
-    task.date = date;
+    const taskIndex = backlog.findIndex(
+      (innerTask) => innerTask.id === task.id
+    );
+
+    setBacklog([
+      ...backlog.slice(0, taskIndex),
+      task,
+      ...backlog.slice(taskIndex + 1, backlog.length),
+    ]);
 
     localStorage.setItem("tasksBacklog", JSON.stringify(backlog));
     isForm();
@@ -78,8 +87,8 @@ const Form = ({ isForm, taskToEdit, setTaskToEdit, backlog, setBacklog }) => {
           type="text"
           className="add-form-input"
           placeholder="Title"
-          value={title}
-          setValue={setTitle}
+          value={task.title}
+          setValue={updateTaskField}
         />
 
         <Input
@@ -88,21 +97,21 @@ const Form = ({ isForm, taskToEdit, setTaskToEdit, backlog, setBacklog }) => {
           type="text"
           className="add-form-input"
           placeholder="Description"
-          value={description}
-          setValue={setDescription}
+          value={task.description}
+          setValue={updateTaskField}
         />
 
-        <Assigned value={assigned} setValue={setAssigned} />
+        <Assigned value={task.assigned} setValue={updateTaskField} />
 
-        <Priority value={priority} setValue={setPriority} />
+        <Priority value={task.priority} setValue={updateTaskField} />
 
         <Input
           name="date"
           label="Due Date"
           type="date"
           className="add-form-date"
-          value={date}
-          setValue={setDate}
+          value={task.date}
+          setValue={updateTaskField}
         />
 
         <div className="form-button-wrapper">

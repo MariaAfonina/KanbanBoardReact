@@ -9,6 +9,9 @@ const Input = ({
   value,
   setValue,
 }) => {
+  function onInputChange(e) {
+    setValue(name, e.target.value);
+  }
   return (
     <div className="add-form-parameter">
       <label htmlFor={name}>{label}</label>
@@ -18,9 +21,7 @@ const Input = ({
         className={className}
         placeholder={placeholder}
         value={value}
-        onChange={(e) => {
-          setValue(e.target.value);
-        }}
+        onChange={onInputChange}
       />
     </div>
   );

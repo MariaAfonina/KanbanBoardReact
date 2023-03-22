@@ -51,8 +51,11 @@ function App() {
       )}
       <MainBlock
         backlog={backlog}
+        setBacklog={setBacklog}
         inProgress={inProgress}
+        setInProgress={setInProgress}
         done={done}
+        setDone={setDone}
         isForm={isOpenForm}
         editTask={findEditId}
         onTaskDelete={onTaskDelete}
