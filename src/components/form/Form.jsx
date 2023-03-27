@@ -2,12 +2,12 @@ import "./form.css";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import Input from "../input/Input";
-import Assigned from "../dropdowns/Assigned";
+import Assignee from "../dropdowns/Assignee";
 import Priority from "../dropdowns/Priority";
 
 const defaultTask = {
   id: "",
-  status: "tasksBacklog",
+  status: "backlog",
   title: "",
   description: "",
   assigned: "",
@@ -15,7 +15,17 @@ const defaultTask = {
   date: "",
 };
 
-const Form = ({ isForm, taskToEdit, setTaskToEdit, backlog, setBacklog }) => {
+const Form = ({
+  toggleForm,
+  taskToEdit,
+  setTaskToEdit,
+  backlogTasks,
+  setBacklogTasks,
+  inProgressTasks,
+  setInProgressTasks,
+  doneTasks,
+  setDoneTasks,
+}) => {
   const [task, setTask] = useState({
     id: taskToEdit ? taskToEdit.id : "",
     status: taskToEdit ? taskToEdit.status : "backlog",
@@ -32,9 +42,9 @@ const Form = ({ isForm, taskToEdit, setTaskToEdit, backlog, setBacklog }) => {
 
   function addTask(e) {
     e.preventDefault();
-    isForm();
+    toggleForm();
     const updatedStorage = [
-      ...backlog,
+      ...backlogTasks,
       {
         id: uuidv4(),
         status: task.status,
@@ -47,36 +57,71 @@ const Form = ({ isForm, taskToEdit, setTaskToEdit, backlog, setBacklog }) => {
     ];
     localStorage.setItem("tasksBacklog", JSON.stringify(updatedStorage));
     setTask(defaultTask);
-    setBacklog(JSON.parse(localStorage.getItem("tasksBacklog")) || []);
+    setBacklogTasks(JSON.parse(localStorage.getItem("tasksBacklog")) || []);
   }
 
   function updateTask(e) {
     e.preventDefault();
 
-    const taskIndex = backlog.findIndex(
-      (innerTask) => innerTask.id === task.id
-    );
+    if (task.status === "backlog") {
+      const taskIndex = backlogTasks.findIndex(
+        (innerTask) => innerTask.id === task.id
+      );
 
-    setBacklog([
-      ...backlog.slice(0, taskIndex),
-      task,
-      ...backlog.slice(taskIndex + 1, backlog.length),
-    ]);
+      setBacklogTasks([
+        ...backlogTasks.slice(0, taskIndex),
+        task,
+        ...backlogTasks.slice(taskIndex + 1, backlogTasks.length),
+      ]);
 
-    localStorage.setItem("tasksBacklog", JSON.stringify(backlog));
-    isForm();
+      localStorage.setItem("tasksBacklog", JSON.stringify(backlogTasks));
+    }
+
+    if (task.status === "inProgress") {
+      const taskIndex = inProgressTasks.findIndex(
+        (innerTask) => innerTask.id === task.id
+      );
+
+      setInProgressTasks([
+        ...inProgressTasks.slice(0, taskIndex),
+        task,
+        ...inProgressTasks.slice(taskIndex + 1, inProgressTasks.length),
+      ]);
+
+      localStorage.setItem("tasksInProgress", JSON.stringify(inProgressTasks));
+    }
+
+    if (task.status === "done") {
+      const taskIndex = doneTasks.findIndex(
+        (innerTask) => innerTask.id === task.id
+      );
+
+      setDoneTasks([
+        ...doneTasks.slice(0, taskIndex),
+        task,
+        ...doneTasks.slice(taskIndex + 1, doneTasks.length),
+      ]);
+
+      localStorage.setItem("tasksDone", JSON.stringify(doneTasks));
+    }
+    toggleForm();
     setTaskToEdit();
   }
 
   function closeForm(e) {
     e.preventDefault();
-    isForm();
+    toggleForm();
+    setTaskToEdit();
   }
 
   return (
     <div className="add-form-wrapper">
       <form className="add-form">
-        <h2 className="add-form-title">Add a New Task</h2>
+        {taskToEdit ? (
+          <h2 className="add-form-title">Update task</h2>
+        ) : (
+          <h2 className="add-form-title">Add a New Task</h2>
+        )}
         <button className="button-delete form-btn-close" onClick={closeForm}>
           <i className="fa-solid fa-xmark"></i>
         </button>
@@ -101,9 +146,17 @@ const Form = ({ isForm, taskToEdit, setTaskToEdit, backlog, setBacklog }) => {
           setValue={updateTaskField}
         />
 
-        <Assigned value={task.assigned} setValue={updateTaskField} />
+        <Assignee
+          fieldName="assigned"
+          value={task.assigned}
+          setValue={updateTaskField}
+        />
 
-        <Priority value={task.priority} setValue={updateTaskField} />
+        <Priority
+          fieldName="priority"
+          value={task.priority}
+          setValue={updateTaskField}
+        />
 
         <Input
           name="date"

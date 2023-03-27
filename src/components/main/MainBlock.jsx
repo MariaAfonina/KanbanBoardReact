@@ -2,14 +2,14 @@ import "./mainBlock.css";
 import Task from "../task/Task";
 
 const MainBlock = ({
-  backlog,
-  setBacklog,
-  inProgress,
-  setInProgress,
-  done,
-  setDone,
-  isForm,
-  editTask,
+  backlogTasks,
+  setBacklogTasks,
+  inProgressTasks,
+  setInProgressTasks,
+  doneTasks,
+  setDoneTasks,
+  toggleForm,
+  handleEditTask,
   onTaskDelete,
 }) => {
   return (
@@ -22,36 +22,37 @@ const MainBlock = ({
           const previousGroupName = event.dataTransfer.getData(
             "data-task-group-status"
           );
-          const nextGroupName = event.target.dataset.taskGroupStatus;
+          const nextGroupName = event.currentTarget.dataset.taskGroupStatus;
 
           if (previousGroupName === "inProgress") {
             const inProgressGroup =
-              inProgress[inProgress.findIndex((task) => task.id === itemId)];
+              inProgressTasks[
+                inProgressTasks.findIndex((task) => task.id === itemId)
+              ];
             inProgressGroup.status = nextGroupName;
-            setBacklog([...backlog, inProgressGroup]);
-            setInProgress(inProgress.filter((task) => task.id !== itemId));
+            setBacklogTasks([...backlogTasks, inProgressGroup]);
+            setInProgressTasks(
+              inProgressTasks.filter((task) => task.id !== itemId)
+            );
           }
 
           if (previousGroupName === "done") {
             const doneGroup =
-              done[done.findIndex((task) => task.id === itemId)];
+              doneTasks[doneTasks.findIndex((task) => task.id === itemId)];
             doneGroup.status = nextGroupName;
-            setBacklog([...backlog, doneGroup]);
-            setDone(done.filter((task) => task.id !== itemId));
+            setBacklogTasks([...backlogTasks, doneGroup]);
+            setDoneTasks(doneTasks.filter((task) => task.id !== itemId));
           }
         }}
       >
         <h2 className="task-title">Backlog</h2>
-        {backlog.map((task) => (
+        {backlogTasks.map((task) => (
           <Task
             task={task}
             key={task.id}
-            isForm={isForm}
-            editTask={editTask}
+            toggleForm={toggleForm}
+            handleEditTask={handleEditTask}
             onTaskDelete={onTaskDelete}
-            backlog={backlog}
-            inProgress={inProgress}
-            done={done}
           />
         ))}
       </div>
@@ -64,36 +65,34 @@ const MainBlock = ({
             "data-task-group-status"
           );
           const nextGroupName = event.target.dataset.taskGroupStatus;
-          console.log(previousGroupName);
 
           if (previousGroupName === "backlog") {
             const backlogGroup =
-              backlog[backlog.findIndex((task) => task.id === itemId)];
+              backlogTasks[
+                backlogTasks.findIndex((task) => task.id === itemId)
+              ];
             backlogGroup.status = nextGroupName;
-            setInProgress([...inProgress, backlogGroup]);
-            setBacklog(backlog.filter((task) => task.id !== itemId));
+            setInProgressTasks([...inProgressTasks, backlogGroup]);
+            setBacklogTasks(backlogTasks.filter((task) => task.id !== itemId));
           }
 
           if (previousGroupName === "done") {
             const doneGroup =
-              done[done.findIndex((task) => task.id === itemId)];
+              doneTasks[doneTasks.findIndex((task) => task.id === itemId)];
             doneGroup.status = nextGroupName;
-            setInProgress([...inProgress, doneGroup]);
-            setDone(done.filter((task) => task.id !== itemId));
+            setInProgressTasks([...inProgressTasks, doneGroup]);
+            setDoneTasks(doneTasks.filter((task) => task.id !== itemId));
           }
         }}
       >
         <h2 className="task-title">In progress</h2>
-        {inProgress.map((task) => (
+        {inProgressTasks.map((task) => (
           <Task
             task={task}
             key={task.id}
-            isForm={isForm}
-            editTask={editTask}
+            toggleForm={toggleForm}
+            handleEditTask={handleEditTask}
             onTaskDelete={onTaskDelete}
-            backlog={backlog}
-            inProgress={inProgress}
-            done={done}
           />
         ))}
       </div>
@@ -109,32 +108,35 @@ const MainBlock = ({
 
           if (previousGroupName === "backlog") {
             const backlogGroup =
-              backlog[backlog.findIndex((task) => task.id === itemId)];
+              backlogTasks[
+                backlogTasks.findIndex((task) => task.id === itemId)
+              ];
             backlogGroup.status = nextGroupName;
-            setDone([...done, backlogGroup]);
-            setBacklog(backlog.filter((task) => task.id !== itemId));
+            setDoneTasks([...doneTasks, backlogGroup]);
+            setBacklogTasks(backlogTasks.filter((task) => task.id !== itemId));
           }
 
           if (previousGroupName === "inProgress") {
             const inProgressGroup =
-              inProgress[inProgress.findIndex((task) => task.id === itemId)];
+              inProgressTasks[
+                inProgressTasks.findIndex((task) => task.id === itemId)
+              ];
             inProgressGroup.status = nextGroupName;
-            setDone([...done, inProgressGroup]);
-            setInProgress(inProgress.filter((task) => task.id !== itemId));
+            setDoneTasks([...doneTasks, inProgressGroup]);
+            setInProgressTasks(
+              inProgressTasks.filter((task) => task.id !== itemId)
+            );
           }
         }}
       >
         <h2 className="task-title">Done</h2>
-        {done.map((task) => (
+        {doneTasks.map((task) => (
           <Task
             task={task}
             key={task.id}
-            isForm={isForm}
-            editTask={editTask}
+            toggleForm={toggleForm}
+            handleEditTask={handleEditTask}
             onTaskDelete={onTaskDelete}
-            backlog={backlog}
-            inProgress={inProgress}
-            done={done}
           />
         ))}
       </div>

@@ -1,10 +1,10 @@
 import "./task.css";
 
-const Task = ({ task, isForm, editTask, onTaskDelete }) => {
+const Task = ({ task, toggleForm, handleEditTask, onTaskDelete }) => {
   function isFormEditTask(e) {
     e.preventDefault();
-    isForm();
-    editTask(task.id);
+    toggleForm();
+    handleEditTask(task.id, task.status);
   }
 
   let priorityStyle;
@@ -15,7 +15,7 @@ const Task = ({ task, isForm, editTask, onTaskDelete }) => {
   if (task.priority === "Medium") {
     priorityStyle = "priority-value priority-value-medium";
   }
-  if (task.priori === "Low") {
+  if (task.priority === "Low") {
     priorityStyle = "priority-value priority-value-low";
   }
 
@@ -35,7 +35,7 @@ const Task = ({ task, isForm, editTask, onTaskDelete }) => {
           <button
             className="button-delete"
             onClick={() => {
-              onTaskDelete(task.id);
+              onTaskDelete(task.id, task.status);
             }}
           >
             <i className="fa-solid fa-xmark"></i>

@@ -3,19 +3,19 @@ import Arrow from "../arrow/Arrow";
 import Value from "./Value";
 import { useState } from "react";
 
-const Priority = ({ value, setValue }) => {
-  const [priority, setPriority] = useState(value);
+const Priority = ({ fieldName, value, setValue }) => {
+  const [selectedPriority, setSelectedPriority] = useState(value);
 
   function chooseValue(name) {
-    setPriority(name);
-    setValue(name);
+    setSelectedPriority(name);
+    setValue(fieldName, name);
   }
 
   return (
     <div className="add-form-parameter">
       <label>Priority</label>
       <div className="dropdown-wrapper">
-        {priority}
+        {selectedPriority}
         <Arrow />
         <ul className="dropdown-value">
           <Value

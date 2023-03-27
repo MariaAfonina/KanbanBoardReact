@@ -3,19 +3,19 @@ import "./dropdowns.css";
 import Value from "./Value";
 import { useState } from "react";
 
-const Assigned = ({ value, setValue }) => {
-  const [assigned, setAssigned] = useState(value);
+const Assignee = ({ fieldName, value, setValue }) => {
+  const [assignee, setAssignee] = useState(value);
 
   function chooseValue(name) {
-    setAssigned(name);
-    setValue(name);
+    setAssignee(name);
+    setValue(fieldName, name);
   }
 
   return (
     <div className="add-form-parameter">
       <label>Assignee</label>
       <div className="dropdown-wrapper">
-        {assigned}
+        {assignee}
         <Arrow />
         <ul className="dropdown-value">
           <Value
@@ -34,4 +34,4 @@ const Assigned = ({ value, setValue }) => {
   );
 };
 
-export default Assigned;
+export default Assignee;
