@@ -5,10 +5,16 @@ import { useState } from "react";
 
 const Priority = ({ fieldName, value, setValue }) => {
   const [selectedPriority, setSelectedPriority] = useState(value);
+  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
   function chooseValue(name) {
     setSelectedPriority(name);
     setValue(fieldName, name);
+    toggleDropdown();
+  }
+
+  function toggleDropdown() {
+    setIsDropdownOpened(!isDropdownOpened);
   }
 
   return (
@@ -16,24 +22,26 @@ const Priority = ({ fieldName, value, setValue }) => {
       <label>Priority</label>
       <div className="dropdown-wrapper">
         {selectedPriority}
-        <Arrow />
-        <ul className="dropdown-value">
-          <Value
-            name="High"
-            styleName="high priority"
-            chooseValue={chooseValue}
-          />
-          <Value
-            name="Medium"
-            styleName="medium priority"
-            chooseValue={chooseValue}
-          />
-          <Value
-            name="Low"
-            styleName="low priority"
-            chooseValue={chooseValue}
-          />
-        </ul>
+        <Arrow toggleDropdown={toggleDropdown} />
+        {isDropdownOpened && (
+          <ul className="dropdown-value">
+            <Value
+              name="High"
+              styleName="high priority"
+              chooseValue={chooseValue}
+            />
+            <Value
+              name="Medium"
+              styleName="medium priority"
+              chooseValue={chooseValue}
+            />
+            <Value
+              name="Low"
+              styleName="low priority"
+              chooseValue={chooseValue}
+            />
+          </ul>
+        )}
       </div>
     </div>
   );

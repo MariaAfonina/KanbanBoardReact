@@ -1,31 +1,49 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Header from "./components/header/Header";
 import Form from "./components/form/Form";
 import MainBlock from "./components/main/MainBlock";
 
 function App() {
   const [backlogTasks, setBacklogTasks] = useState(
-    JSON.parse(localStorage.getItem("tasksBacklog")) || []
+    JSON.parse(localStorage.getItem("backlog")) || []
   );
 
   const [inProgressTasks, setInProgressTasks] = useState(
-    JSON.parse(localStorage.getItem("tasksInProgress")) || []
+    JSON.parse(localStorage.getItem("inProgress")) || []
   );
 
   const [doneTasks, setDoneTasks] = useState(
-    JSON.parse(localStorage.getItem("tasksDone")) || []
+    JSON.parse(localStorage.getItem("done")) || []
+  );
+
+  const mapStatusToTasksList = useMemo(
+    () => ({
+      backlog: backlogTasks,
+      inProgress: inProgressTasks,
+      done: doneTasks,
+    }),
+    [backlogTasks, inProgressTasks, doneTasks]
+  );
+
+  const mapStatusToTasksSetter = useMemo(
+    () => ({
+      backlog: setBacklogTasks,
+      inProgress: setInProgressTasks,
+      done: setDoneTasks,
+    }),
+    []
   );
 
   useEffect(() => {
-    localStorage.setItem("tasksBacklog", JSON.stringify(backlogTasks));
+    localStorage.setItem("backlog", JSON.stringify(backlogTasks));
   }, [backlogTasks]);
 
   useEffect(() => {
-    localStorage.setItem("tasksInProgress", JSON.stringify(inProgressTasks));
+    localStorage.setItem("inProgress", JSON.stringify(inProgressTasks));
   }, [inProgressTasks]);
 
   useEffect(() => {
-    localStorage.setItem("tasksDone", JSON.stringify(doneTasks));
+    localStorage.setItem("done", JSON.stringify(doneTasks));
   }, [doneTasks]);
 
   const [isFormOpened, setIsFormOpened] = useState(false);
@@ -36,37 +54,17 @@ function App() {
   }
 
   function handleEditTask(id, status) {
-    if (status === "backlog") {
-      const taskFromBacklog =
-        backlogTasks[backlogTasks.findIndex((task) => task.id === id)];
-      setTaskToEdit(taskFromBacklog);
-    }
+    const tasksFromStatus = mapStatusToTasksList[status];
 
-    if (status === "inProgress") {
-      const taskFromInProgress =
-        inProgressTasks[inProgressTasks.findIndex((task) => task.id === id)];
-      setTaskToEdit(taskFromInProgress);
-    }
-
-    if (status === "done") {
-      const taskFromDone =
-        doneTasks[doneTasks.findIndex((task) => task.id === id)];
-      setTaskToEdit(taskFromDone);
-    }
+    setTaskToEdit(
+      tasksFromStatus[tasksFromStatus.findIndex((task) => task.id === id)]
+    );
   }
 
   function onTaskDelete(taskId, status) {
-    if (status === "backlog") {
-      setBacklogTasks(backlogTasks.filter((task) => task.id !== taskId));
-    }
-
-    if (status === "inProgress") {
-      setInProgressTasks(inProgressTasks.filter((task) => task.id !== taskId));
-    }
-
-    if (status === "done") {
-      setDoneTasks(doneTasks.filter((task) => task.id !== taskId));
-    }
+    mapStatusToTasksSetter[status](
+      mapStatusToTasksList[status].filter((task) => task.id !== taskId)
+    );
   }
 
   return (
@@ -79,22 +77,19 @@ function App() {
           setTaskToEdit={setTaskToEdit}
           backlogTasks={backlogTasks}
           setBacklogTasks={setBacklogTasks}
-          inProgressTasks={inProgressTasks}
-          setInProgressTasks={setInProgressTasks}
-          doneTasks={doneTasks}
-          setDoneTasks={setDoneTasks}
+          mapStatusToTasksList={mapStatusToTasksList}
+          mapStatusToTasksSetter={mapStatusToTasksSetter}
         />
       )}
       <MainBlock
         backlogTasks={backlogTasks}
-        setBacklogTasks={setBacklogTasks}
         inProgressTasks={inProgressTasks}
-        setInProgressTasks={setInProgressTasks}
         doneTasks={doneTasks}
-        setDoneTasks={setDoneTasks}
         toggleForm={toggleForm}
         handleEditTask={handleEditTask}
         onTaskDelete={onTaskDelete}
+        mapStatusToTasksList={mapStatusToTasksList}
+        mapStatusToTasksSetter={mapStatusToTasksSetter}
       />
     </div>
   );

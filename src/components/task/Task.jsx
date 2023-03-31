@@ -1,30 +1,25 @@
 import "./task.css";
 
-const Task = ({ task, toggleForm, handleEditTask, onTaskDelete }) => {
-  function isFormEditTask(e) {
+const Task = ({
+  task,
+  toggleForm,
+  handleEditTask,
+  onTaskDelete,
+  setTaskId,
+  setTaskStatus,
+}) => {
+  function editTask(e) {
     e.preventDefault();
     toggleForm();
     handleEditTask(task.id, task.status);
   }
 
-  let priorityStyle;
-
-  if (task.priority === "High") {
-    priorityStyle = "priority-value priority-value-high";
-  }
-  if (task.priority === "Medium") {
-    priorityStyle = "priority-value priority-value-medium";
-  }
-  if (task.priority === "Low") {
-    priorityStyle = "priority-value priority-value-low";
-  }
-
   return (
     task && (
       <div
-        onDragStart={(event) => {
-          event.dataTransfer.setData("id", task.id);
-          event.dataTransfer.setData("data-task-group-status", task.status);
+        onDragStart={() => {
+          setTaskId(task.id);
+          setTaskStatus(task.status);
         }}
         id={task.id}
         className="task"
@@ -50,7 +45,11 @@ const Task = ({ task, toggleForm, handleEditTask, onTaskDelete }) => {
 
         <div className="task-wrapper">
           <div className="task-parameter">Priority:</div>
-          <div className={priorityStyle}>{task.priority}</div>
+          <div
+            className={`priority-value priority-value-${task.priority.toLowerCase()}`}
+          >
+            {task.priority}
+          </div>
         </div>
 
         <div className="task-wrapper">
@@ -60,7 +59,7 @@ const Task = ({ task, toggleForm, handleEditTask, onTaskDelete }) => {
 
         <div className="tag-edit-wrapper">
           <button className="btn-tag">+Tag</button>
-          <button className="btn-edit" onClick={isFormEditTask}>
+          <button className="btn-edit" onClick={editTask}>
             <i className="fa-solid fa-pen"></i>
           </button>
         </div>

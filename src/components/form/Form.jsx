@@ -21,10 +21,8 @@ const Form = ({
   setTaskToEdit,
   backlogTasks,
   setBacklogTasks,
-  inProgressTasks,
-  setInProgressTasks,
-  doneTasks,
-  setDoneTasks,
+  mapStatusToTasksList,
+  mapStatusToTasksSetter,
 }) => {
   const [task, setTask] = useState({
     id: taskToEdit ? taskToEdit.id : "",
@@ -55,55 +53,29 @@ const Form = ({
         date: task.date,
       },
     ];
-    localStorage.setItem("tasksBacklog", JSON.stringify(updatedStorage));
+    localStorage.setItem("backlog", JSON.stringify(updatedStorage));
     setTask(defaultTask);
-    setBacklogTasks(JSON.parse(localStorage.getItem("tasksBacklog")) || []);
+    setBacklogTasks(JSON.parse(localStorage.getItem("backlog")) || []);
   }
 
   function updateTask(e) {
     e.preventDefault();
 
-    if (task.status === "backlog") {
-      const taskIndex = backlogTasks.findIndex(
-        (innerTask) => innerTask.id === task.id
-      );
+    const tasksFromStatus = mapStatusToTasksList[task.status];
+    const setterFromStatus = mapStatusToTasksSetter[task.status];
 
-      setBacklogTasks([
-        ...backlogTasks.slice(0, taskIndex),
-        task,
-        ...backlogTasks.slice(taskIndex + 1, backlogTasks.length),
-      ]);
+    const taskIndex = tasksFromStatus.findIndex(
+      (innerTask) => innerTask.id === task.id
+    );
 
-      localStorage.setItem("tasksBacklog", JSON.stringify(backlogTasks));
-    }
+    setterFromStatus([
+      ...tasksFromStatus.slice(0, taskIndex),
+      task,
+      ...tasksFromStatus.slice(taskIndex + 1, tasksFromStatus.length),
+    ]);
 
-    if (task.status === "inProgress") {
-      const taskIndex = inProgressTasks.findIndex(
-        (innerTask) => innerTask.id === task.id
-      );
+    localStorage.setItem(task.status, JSON.stringify(tasksFromStatus));
 
-      setInProgressTasks([
-        ...inProgressTasks.slice(0, taskIndex),
-        task,
-        ...inProgressTasks.slice(taskIndex + 1, inProgressTasks.length),
-      ]);
-
-      localStorage.setItem("tasksInProgress", JSON.stringify(inProgressTasks));
-    }
-
-    if (task.status === "done") {
-      const taskIndex = doneTasks.findIndex(
-        (innerTask) => innerTask.id === task.id
-      );
-
-      setDoneTasks([
-        ...doneTasks.slice(0, taskIndex),
-        task,
-        ...doneTasks.slice(taskIndex + 1, doneTasks.length),
-      ]);
-
-      localStorage.setItem("tasksDone", JSON.stringify(doneTasks));
-    }
     toggleForm();
     setTaskToEdit();
   }
