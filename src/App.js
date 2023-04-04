@@ -81,6 +81,7 @@ function App() {
           mapStatusToTasksSetter={mapStatusToTasksSetter}
         />
       )}
+
       <MainBlock
         backlogTasks={backlogTasks}
         inProgressTasks={inProgressTasks}

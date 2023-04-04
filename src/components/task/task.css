@@ -54,12 +54,6 @@
   font-size: 12px;
 }
 
-.assigned-img {
-  width: 16px;
-  height: 16px;
-  padding-right: 5px;
-}
-
 .priority-value {
   font-weight: 700;
   font-size: 12px;
@@ -97,7 +91,7 @@
   justify-content: space-between;
 }
 
-.btn-tag {
+.btn-add-tag {
   color: #455266;
   width: 43px;
   height: 18px;
@@ -108,6 +102,39 @@
   background: #f5f8fa;
   border-radius: 100px;
   border: none;
+}
+
+.tags-wrapper .tag {
+  display: inline-block;
+}
+
+.tag {
+  color: #455266;
+  font-weight: 400;
+  font-size: 12px;
+  background: #f5f8fa;
+  border-radius: 100px;
+  border: none;
+  padding: 3px;
+  margin: 5px 3px 0px 0px;
+}
+
+.btn-tag-wrapper {
+  display: inline-block;
+}
+
+.btn-delete-tag {
+  font-size: 10px;
+  color: #a80f0f;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0px 3px;
+}
+
+.btn-edit-tag {
+  padding: 0px 3px;
+  font-size: 10px;
 }
 
 .btn-edit {

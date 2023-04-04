@@ -3,3 +3,12 @@ body {
   font-style: normal;
   background-color: #f5f8fa;
 }
+
+.all-btn {
+  font-weight: 500;
+  color: #455266;
+  cursor: pointer;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 4px;
+}

@@ -1,0 +1,39 @@
+.add-tag-form {
+  background-color: #f5f8fa;
+  border-radius: 4px;
+  margin-top: 10px;
+  padding: 5px;
+  text-align: center;
+}
+
+.input-close-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-close {
+  font-size: 12px;
+  color: #a80f0f;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0px;
+  margin-top: 5px;
+}
+
+.add-tag-input {
+  width: 90%;
+  height: 20px;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  border-radius: 5px;
+  margin-top: 5px;
+  color: #455266;
+}
+
+.add-tag-button {
+  margin-top: 5px;
+  width: 40px;
+  height: 20px;
+  background: #e9ffe3;
+}

@@ -1,4 +1,6 @@
 import "./task.css";
+import { useState } from "react";
+import FormTag from "../formTag/FormTag";
 
 const Task = ({
   task,
@@ -7,7 +9,59 @@ const Task = ({
   onTaskDelete,
   setTaskId,
   setTaskStatus,
+  mapStatusToTasksList,
+  mapStatusToTasksSetter,
 }) => {
+  const [isFormTagOpened, setIsFormTagOpened] = useState(false);
+  const [taskTags, setTaskTags] = useState(task.tags || []);
+  const [isEditTag, setIsEditTag] = useState(false);
+
+  function toggleFormTag() {
+    setIsFormTagOpened(!isFormTagOpened);
+  }
+
+  function addTag(tagValue) {
+    const tags = [...taskTags, tagValue];
+    setTaskTags(tags);
+    toggleFormTag();
+    handleTaskTag(tagValue);
+  }
+
+  function handleTaskTag(tagValue) {
+    const tasksFromStatus = mapStatusToTasksList[task.status];
+    const tasksSetter = mapStatusToTasksSetter[task.status];
+
+    const taskIndex = tasksFromStatus.findIndex((t) => t.id === task.id);
+    const taskForTags = tasksFromStatus[taskIndex];
+    taskForTags.tags = [...taskTags, tagValue];
+
+    tasksSetter([
+      ...tasksFromStatus.slice(0, taskIndex),
+      taskForTags,
+      ...tasksFromStatus.slice(taskIndex + 1, tasksFromStatus.length),
+    ]);
+  }
+
+  function deleteTag(index, e) {
+    e.preventDefault();
+    const tasksFromStatus = mapStatusToTasksList[task.status];
+    const tasksSetter = mapStatusToTasksSetter[task.status];
+
+    const taskIndex = tasksFromStatus.findIndex((t) => t.id === task.id);
+    const tagsFromTaskIndex = tasksFromStatus[taskIndex].tags;
+    const tagIndex = tagsFromTaskIndex[index];
+    const tagsArray = tagsFromTaskIndex.filter((tag) => tag !== tagIndex);
+    tasksFromStatus[taskIndex].tags = tagsArray;
+
+    setTaskTags(tagsArray);
+
+    tasksSetter([
+      ...tasksFromStatus.slice(0, taskIndex),
+      tasksFromStatus[taskIndex],
+      ...tasksFromStatus.slice(taskIndex + 1, tasksFromStatus.length),
+    ]);
+  }
+
   function editTask(e) {
     e.preventDefault();
     toggleForm();
@@ -58,11 +112,42 @@ const Task = ({
         </div>
 
         <div className="tag-edit-wrapper">
-          <button className="btn-tag">+Tag</button>
+          <button className="btn-add-tag" onClick={() => toggleFormTag()}>
+            +Tag
+          </button>
+
           <button className="btn-edit" onClick={editTask}>
             <i className="fa-solid fa-pen"></i>
           </button>
         </div>
+        <div className="tags-wrapper">
+          {task.tags &&
+            task.tags.map((tag) => (
+              <div
+                key={taskTags.indexOf(tag)}
+                className="tag"
+                onClick={() => setIsEditTag(!isEditTag)}
+              >
+                {tag}
+                {isEditTag && (
+                  <div className="btn-tag-wrapper">
+                    <button
+                      className="btn-delete-tag"
+                      onClick={() => deleteTag(taskTags.indexOf(tag))}
+                    >
+                      <i className="fa-solid fa-xmark"></i>
+                    </button>
+                    <button className="btn-edit-tag btn-edit">
+                      <i className="fa-solid fa-pen"></i>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+        </div>
+        {isFormTagOpened && (
+          <FormTag addTag={addTag} toggleFormTag={toggleFormTag} />
+        )}
       </div>
     )
   );

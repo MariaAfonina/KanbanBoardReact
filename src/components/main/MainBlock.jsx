@@ -58,6 +58,8 @@ const MainBlock = ({
             onTaskDelete={onTaskDelete}
             setTaskId={setTaskId}
             setTaskStatus={setTaskStatus}
+            mapStatusToTasksList={mapStatusToTasksList}
+            mapStatusToTasksSetter={mapStatusToTasksSetter}
           />
         ))}
       </div>
@@ -76,6 +78,8 @@ const MainBlock = ({
             onTaskDelete={onTaskDelete}
             setTaskId={setTaskId}
             setTaskStatus={setTaskStatus}
+            mapStatusToTasksList={mapStatusToTasksList}
+            mapStatusToTasksSetter={mapStatusToTasksSetter}
           />
         ))}
       </div>
@@ -94,6 +98,8 @@ const MainBlock = ({
             onTaskDelete={onTaskDelete}
             setTaskId={setTaskId}
             setTaskStatus={setTaskStatus}
+            mapStatusToTasksList={mapStatusToTasksList}
+            mapStatusToTasksSetter={mapStatusToTasksSetter}
           />
         ))}
       </div>
