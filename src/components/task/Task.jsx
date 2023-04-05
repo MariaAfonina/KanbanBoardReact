@@ -15,16 +15,12 @@ const Task = ({
   const [isFormTagOpened, setIsFormTagOpened] = useState(false);
   const [taskTags, setTaskTags] = useState(task.tags || []);
   const [isEditTag, setIsEditTag] = useState(false);
+  const [currentTag, setCurrentTag] = useState();
 
   function toggleFormTag() {
     setIsFormTagOpened(!isFormTagOpened);
-  }
-
-  function addTag(tagValue) {
-    const tags = [...taskTags, tagValue];
-    setTaskTags(tags);
-    toggleFormTag();
-    handleTaskTag(tagValue);
+    setCurrentTag();
+    setIsEditTag(false);
   }
 
   function handleTaskTag(tagValue) {
@@ -42,15 +38,21 @@ const Task = ({
     ]);
   }
 
-  function deleteTag(index, e) {
-    e.preventDefault();
+  function addTag(tagValue) {
+    const tags = [...taskTags, tagValue];
+    setTaskTags(tags);
+    toggleFormTag();
+    handleTaskTag(tagValue);
+  }
+
+  function deleteTag(tagIndex) {
     const tasksFromStatus = mapStatusToTasksList[task.status];
     const tasksSetter = mapStatusToTasksSetter[task.status];
 
     const taskIndex = tasksFromStatus.findIndex((t) => t.id === task.id);
     const tagsFromTaskIndex = tasksFromStatus[taskIndex].tags;
-    const tagIndex = tagsFromTaskIndex[index];
-    const tagsArray = tagsFromTaskIndex.filter((tag) => tag !== tagIndex);
+    const tagFromIndex = tagsFromTaskIndex[tagIndex];
+    const tagsArray = tagsFromTaskIndex.filter((tag) => tag !== tagFromIndex);
     tasksFromStatus[taskIndex].tags = tagsArray;
 
     setTaskTags(tagsArray);
@@ -60,6 +62,31 @@ const Task = ({
       tasksFromStatus[taskIndex],
       ...tasksFromStatus.slice(taskIndex + 1, tasksFromStatus.length),
     ]);
+  }
+
+  function handleFormToEditTag(tag) {
+    setCurrentTag(tag);
+    setIsFormTagOpened(!isFormTagOpened);
+  }
+
+  function updateTag(editedTag) {
+    const tagIndex = taskTags.findIndex((t) => t === currentTag);
+    taskTags[tagIndex] = editedTag;
+    setTaskTags(taskTags);
+    setCurrentTag();
+    const tasksFromStatus = mapStatusToTasksList[task.status];
+    const tasksSetter = mapStatusToTasksSetter[task.status];
+
+    const taskIndex = tasksFromStatus.findIndex((t) => t.id === task.id);
+    tasksFromStatus[taskIndex].tags = taskTags;
+
+    tasksSetter([
+      ...tasksFromStatus.slice(0, taskIndex),
+      tasksFromStatus[taskIndex],
+      ...tasksFromStatus.slice(taskIndex + 1, tasksFromStatus.length),
+    ]);
+
+    setIsFormTagOpened(!isFormTagOpened);
   }
 
   function editTask(e) {
@@ -128,7 +155,7 @@ const Task = ({
                 className="tag"
                 onClick={() => setIsEditTag(!isEditTag)}
               >
-                {tag}
+                # {tag}
                 {isEditTag && (
                   <div className="btn-tag-wrapper">
                     <button
@@ -137,7 +164,10 @@ const Task = ({
                     >
                       <i className="fa-solid fa-xmark"></i>
                     </button>
-                    <button className="btn-edit-tag btn-edit">
+                    <button
+                      className="btn-edit-tag btn-edit"
+                      onClick={() => handleFormToEditTag(tag)}
+                    >
                       <i className="fa-solid fa-pen"></i>
                     </button>
                   </div>
@@ -146,7 +176,12 @@ const Task = ({
             ))}
         </div>
         {isFormTagOpened && (
-          <FormTag addTag={addTag} toggleFormTag={toggleFormTag} />
+          <FormTag
+            currentTag={currentTag}
+            updateTag={updateTag}
+            addTag={addTag}
+            toggleFormTag={toggleFormTag}
+          />
         )}
       </div>
     )

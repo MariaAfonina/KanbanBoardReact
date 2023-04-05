@@ -117,6 +117,7 @@
   border: none;
   padding: 3px;
   margin: 5px 3px 0px 0px;
+  cursor: pointer;
 }
 
 .btn-tag-wrapper {
@@ -133,7 +134,7 @@
 }
 
 .btn-edit-tag {
-  padding: 0px 3px;
+  padding: 0px;
   font-size: 10px;
 }
 
