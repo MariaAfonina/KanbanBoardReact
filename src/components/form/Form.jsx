@@ -1,22 +1,12 @@
 import "./form.css";
 import { v4 as uuidv4 } from "uuid";
-import { useState } from "react";
+import { useState, useMemo, useContext } from "react";
 import Input from "../input/Input";
 import Assignee from "../dropdowns/Assignee";
 import Priority from "../dropdowns/Priority";
-
-const defaultTask = {
-  id: "",
-  status: "backlog",
-  title: "",
-  description: "",
-  assigned: "",
-  priority: "",
-  date: "",
-};
+import { TaskContext } from "../../App";
 
 const Form = ({
-  toggleForm,
   taskToEdit,
   setTaskToEdit,
   backlogTasks,
@@ -24,15 +14,21 @@ const Form = ({
   mapStatusToTasksList,
   mapStatusToTasksSetter,
 }) => {
-  const [task, setTask] = useState({
-    id: taskToEdit ? taskToEdit.id : "",
-    status: taskToEdit ? taskToEdit.status : "backlog",
-    title: taskToEdit ? taskToEdit.title : "",
-    description: taskToEdit ? taskToEdit.description : "",
-    assigned: taskToEdit ? taskToEdit.assigned : "",
-    priority: taskToEdit ? taskToEdit.priority : "",
-    date: taskToEdit ? taskToEdit.date : "",
-  });
+  const defaultTask = useMemo(
+    () => ({
+      id: "",
+      status: "backlog",
+      title: "",
+      description: "",
+      assigned: "",
+      priority: "",
+      date: "",
+    }),
+    []
+  );
+
+  const useTaskContext = useContext(TaskContext);
+  const [task, setTask] = useState(taskToEdit || defaultTask);
 
   function updateTaskField(fieldName, value) {
     setTask({ ...task, [fieldName]: value });
@@ -40,12 +36,12 @@ const Form = ({
 
   function addTask(e) {
     e.preventDefault();
-    toggleForm();
+    useTaskContext.toggleForm();
     const updatedStorage = [
       ...backlogTasks,
       {
         id: uuidv4(),
-        status: task.status,
+        status: "backlog",
         title: task.title,
         description: task.description,
         assigned: task.assigned,
@@ -53,9 +49,9 @@ const Form = ({
         date: task.date,
       },
     ];
-    localStorage.setItem("backlog", JSON.stringify(updatedStorage));
+
     setTask(defaultTask);
-    setBacklogTasks(JSON.parse(localStorage.getItem("backlog")) || []);
+    setBacklogTasks(updatedStorage);
   }
 
   function updateTask(e) {
@@ -74,15 +70,13 @@ const Form = ({
       ...tasksFromStatus.slice(taskIndex + 1, tasksFromStatus.length),
     ]);
 
-    localStorage.setItem(task.status, JSON.stringify(tasksFromStatus));
-
-    toggleForm();
+    useTaskContext.toggleForm();
     setTaskToEdit();
   }
 
   function closeForm(e) {
     e.preventDefault();
-    toggleForm();
+    useTaskContext.toggleForm();
     setTaskToEdit();
   }
 

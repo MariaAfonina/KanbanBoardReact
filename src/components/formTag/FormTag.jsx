@@ -2,13 +2,13 @@ import "./formTag.css";
 import { useState } from "react";
 
 const FormTag = ({ toggleFormTag, addTag, currentTag, updateTag }) => {
-  const [tagValue, setTagValue] = useState(currentTag);
+  const [tagValue, setTagValue] = useState(currentTag || "");
 
   function onTagInputChange(e) {
     setTagValue(e.target.value);
   }
 
-  function onTag(e) {
+  function onTagAdd(e) {
     e.preventDefault();
     addTag(tagValue);
   }
@@ -30,7 +30,7 @@ const FormTag = ({ toggleFormTag, addTag, currentTag, updateTag }) => {
           value={tagValue}
           onChange={onTagInputChange}
         />
-        <button className="btn-close" onClick={() => toggleFormTag()}>
+        <button className="btn-close" onClick={toggleFormTag}>
           <i className="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -39,7 +39,7 @@ const FormTag = ({ toggleFormTag, addTag, currentTag, updateTag }) => {
           Update
         </button>
       ) : (
-        <button className="all-btn tag-button" onClick={onTag}>
+        <button className="all-btn tag-button" onClick={onTagAdd}>
           Add
         </button>
       )}

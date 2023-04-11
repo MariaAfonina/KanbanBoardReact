@@ -1,7 +1,9 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, createContext } from "react";
 import Header from "./components/header/Header";
 import Form from "./components/form/Form";
 import MainBlock from "./components/main/MainBlock";
+
+export const TaskContext = createContext();
 
 function App() {
   const [backlogTasks, setBacklogTasks] = useState(
@@ -34,6 +36,9 @@ function App() {
     []
   );
 
+  const [isFormOpened, setIsFormOpened] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState();
+
   useEffect(() => {
     localStorage.setItem("backlog", JSON.stringify(backlogTasks));
   }, [backlogTasks]);
@@ -45,9 +50,6 @@ function App() {
   useEffect(() => {
     localStorage.setItem("done", JSON.stringify(doneTasks));
   }, [doneTasks]);
-
-  const [isFormOpened, setIsFormOpened] = useState(false);
-  const [taskToEdit, setTaskToEdit] = useState();
 
   function toggleForm() {
     setIsFormOpened(!isFormOpened);
@@ -68,31 +70,35 @@ function App() {
   }
 
   return (
-    <div>
-      <Header toggleForm={toggleForm} />
-      {isFormOpened && (
-        <Form
-          toggleForm={toggleForm}
-          taskToEdit={taskToEdit}
-          setTaskToEdit={setTaskToEdit}
+    <TaskContext.Provider
+      value={{
+        toggleForm: toggleForm,
+        handleEditTask: handleEditTask,
+        onTaskDelete: onTaskDelete,
+      }}
+    >
+      <div>
+        <Header />
+        {isFormOpened && (
+          <Form
+            taskToEdit={taskToEdit}
+            setTaskToEdit={setTaskToEdit}
+            backlogTasks={backlogTasks}
+            setBacklogTasks={setBacklogTasks}
+            mapStatusToTasksList={mapStatusToTasksList}
+            mapStatusToTasksSetter={mapStatusToTasksSetter}
+          />
+        )}
+
+        <MainBlock
           backlogTasks={backlogTasks}
-          setBacklogTasks={setBacklogTasks}
+          inProgressTasks={inProgressTasks}
+          doneTasks={doneTasks}
           mapStatusToTasksList={mapStatusToTasksList}
           mapStatusToTasksSetter={mapStatusToTasksSetter}
         />
-      )}
-
-      <MainBlock
-        backlogTasks={backlogTasks}
-        inProgressTasks={inProgressTasks}
-        doneTasks={doneTasks}
-        toggleForm={toggleForm}
-        handleEditTask={handleEditTask}
-        onTaskDelete={onTaskDelete}
-        mapStatusToTasksList={mapStatusToTasksList}
-        mapStatusToTasksSetter={mapStatusToTasksSetter}
-      />
-    </div>
+      </div>
+    </TaskContext.Provider>
   );
 }
 

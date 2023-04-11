@@ -1,6 +1,10 @@
 import "./header.css";
+import { useContext } from "react";
+import { TaskContext } from "../../App";
 
-const Header = ({ toggleForm }) => {
+const Header = () => {
+  const { toggleForm } = useContext(TaskContext);
+
   return (
     <header>
       <h1 className="title">Kanban Board</h1>

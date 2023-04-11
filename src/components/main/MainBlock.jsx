@@ -1,23 +1,20 @@
 import "./mainBlock.css";
 import Task from "../task/Task";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 const MainBlock = ({
   backlogTasks,
   inProgressTasks,
   doneTasks,
-  toggleForm,
-  handleEditTask,
-  onTaskDelete,
   mapStatusToTasksList,
   mapStatusToTasksSetter,
 }) => {
   const [taskId, setTaskId] = useState();
   const [taskStatus, setTaskStatus] = useState();
 
-  function onDragOver(event) {
+  const onDragOver = useCallback((event) => {
     event.preventDefault();
-  }
+  }, []);
 
   function onDropTask(event) {
     const nextGroupName = event.currentTarget.dataset.taskGroupStatus;
@@ -53,9 +50,6 @@ const MainBlock = ({
           <Task
             task={task}
             key={task.id}
-            toggleForm={toggleForm}
-            handleEditTask={handleEditTask}
-            onTaskDelete={onTaskDelete}
             setTaskId={setTaskId}
             setTaskStatus={setTaskStatus}
             mapStatusToTasksList={mapStatusToTasksList}
@@ -73,9 +67,6 @@ const MainBlock = ({
           <Task
             task={task}
             key={task.id}
-            toggleForm={toggleForm}
-            handleEditTask={handleEditTask}
-            onTaskDelete={onTaskDelete}
             setTaskId={setTaskId}
             setTaskStatus={setTaskStatus}
             mapStatusToTasksList={mapStatusToTasksList}
@@ -93,9 +84,6 @@ const MainBlock = ({
           <Task
             task={task}
             key={task.id}
-            toggleForm={toggleForm}
-            handleEditTask={handleEditTask}
-            onTaskDelete={onTaskDelete}
             setTaskId={setTaskId}
             setTaskStatus={setTaskStatus}
             mapStatusToTasksList={mapStatusToTasksList}

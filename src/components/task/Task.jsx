@@ -1,12 +1,10 @@
 import "./task.css";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import FormTag from "../formTag/FormTag";
+import { TaskContext } from "../../App";
 
 const Task = ({
   task,
-  toggleForm,
-  handleEditTask,
-  onTaskDelete,
   setTaskId,
   setTaskStatus,
   mapStatusToTasksList,
@@ -16,6 +14,7 @@ const Task = ({
   const [taskTags, setTaskTags] = useState(task.tags || []);
   const [isEditTag, setIsEditTag] = useState(false);
   const [currentTag, setCurrentTag] = useState();
+  const useTaskContext = useContext(TaskContext);
 
   function toggleFormTag() {
     setIsFormTagOpened(!isFormTagOpened);
@@ -91,8 +90,8 @@ const Task = ({
 
   function editTask(e) {
     e.preventDefault();
-    toggleForm();
-    handleEditTask(task.id, task.status);
+    useTaskContext.toggleForm();
+    useTaskContext.handleEditTask(task.id, task.status);
   }
 
   return (
@@ -111,7 +110,7 @@ const Task = ({
           <button
             className="button-delete"
             onClick={() => {
-              onTaskDelete(task.id, task.status);
+              useTaskContext.onTaskDelete(task.id, task.status);
             }}
           >
             <i className="fa-solid fa-xmark"></i>
@@ -139,7 +138,7 @@ const Task = ({
         </div>
 
         <div className="tag-edit-wrapper">
-          <button className="btn-add-tag" onClick={() => toggleFormTag()}>
+          <button className="btn-add-tag" onClick={toggleFormTag}>
             +Tag
           </button>
 
