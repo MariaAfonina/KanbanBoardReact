@@ -36,7 +36,6 @@ const Form = ({
 
   function addTask(e) {
     e.preventDefault();
-    useTaskContext.toggleForm();
     const updatedStorage = [
       ...backlogTasks,
       {
@@ -50,6 +49,7 @@ const Form = ({
       },
     ];
 
+    useTaskContext.toggleForm();
     setTask(defaultTask);
     setBacklogTasks(updatedStorage);
   }

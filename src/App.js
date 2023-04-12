@@ -1,4 +1,10 @@
-import { useEffect, useState, useMemo, createContext } from "react";
+import {
+  useEffect,
+  useState,
+  useMemo,
+  createContext,
+  useCallback,
+} from "react";
 import Header from "./components/header/Header";
 import Form from "./components/form/Form";
 import MainBlock from "./components/main/MainBlock";
@@ -51,30 +57,36 @@ function App() {
     localStorage.setItem("done", JSON.stringify(doneTasks));
   }, [doneTasks]);
 
-  function toggleForm() {
+  const toggleForm = useCallback(() => {
     setIsFormOpened(!isFormOpened);
-  }
+  }, [isFormOpened]);
 
-  function handleEditTask(id, status) {
-    const tasksFromStatus = mapStatusToTasksList[status];
+  const handleEditTask = useCallback(
+    (id, status) => {
+      const tasksFromStatus = mapStatusToTasksList[status];
 
-    setTaskToEdit(
-      tasksFromStatus[tasksFromStatus.findIndex((task) => task.id === id)]
-    );
-  }
+      setTaskToEdit(
+        tasksFromStatus[tasksFromStatus.findIndex((task) => task.id === id)]
+      );
+    },
+    [mapStatusToTasksList, setTaskToEdit]
+  );
 
-  function onTaskDelete(taskId, status) {
-    mapStatusToTasksSetter[status](
-      mapStatusToTasksList[status].filter((task) => task.id !== taskId)
-    );
-  }
+  const onTaskDelete = useCallback(
+    (taskId, status) => {
+      mapStatusToTasksSetter[status](
+        mapStatusToTasksList[status].filter((task) => task.id !== taskId)
+      );
+    },
+    [mapStatusToTasksSetter, mapStatusToTasksList]
+  );
 
   return (
     <TaskContext.Provider
       value={{
-        toggleForm: toggleForm,
-        handleEditTask: handleEditTask,
-        onTaskDelete: onTaskDelete,
+        toggleForm,
+        handleEditTask,
+        onTaskDelete,
       }}
     >
       <div>

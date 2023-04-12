@@ -5,6 +5,7 @@ const Arrow = ({ toggleDropdown }) => {
     e.preventDefault();
     toggleDropdown();
   }
+
   return (
     <button className="btn-icon-arrow" onClick={handleClick}>
       <i className="icon-arrow fa-solid fa-caret-down"></i>

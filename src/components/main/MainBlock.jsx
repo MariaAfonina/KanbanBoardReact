@@ -1,6 +1,7 @@
 import "./mainBlock.css";
 import Task from "../task/Task";
-import { useCallback, useState } from "react";
+import { useState } from "react";
+import useDragAndDrop from "./useDragAndDrop";
 
 const MainBlock = ({
   backlogTasks,
@@ -12,32 +13,13 @@ const MainBlock = ({
   const [taskId, setTaskId] = useState();
   const [taskStatus, setTaskStatus] = useState();
 
-  const onDragOver = useCallback((event) => {
-    event.preventDefault();
-  }, []);
+  const { onDragOver, onDropTask } = useDragAndDrop(
+    taskId,
+    taskStatus,
+    mapStatusToTasksList,
+    mapStatusToTasksSetter
+  );
 
-  function onDropTask(event) {
-    const nextGroupName = event.currentTarget.dataset.taskGroupStatus;
-
-    if (taskStatus !== nextGroupName) {
-      const tasksFromStatus = mapStatusToTasksList[taskStatus];
-      const setterFromStatus = mapStatusToTasksSetter[taskStatus];
-
-      const tasksFromNextGroupName = mapStatusToTasksList[nextGroupName];
-      const setterFromNextGroupName = mapStatusToTasksSetter[nextGroupName];
-
-      const tasksGroup =
-        tasksFromStatus[
-          tasksFromStatus.findIndex((task) => task.id === taskId)
-        ];
-
-      tasksGroup.status = nextGroupName;
-
-      setterFromNextGroupName([...tasksFromNextGroupName, tasksGroup]);
-
-      setterFromStatus(tasksFromStatus.filter((task) => task.id !== taskId));
-    }
-  }
   return (
     <main className="tasks-block">
       <div

@@ -69,14 +69,14 @@ const Task = ({
   }
 
   function updateTag(editedTag) {
+    const tasksFromStatus = mapStatusToTasksList[task.status];
+    const tasksSetter = mapStatusToTasksSetter[task.status];
+    const taskIndex = tasksFromStatus.findIndex((t) => t.id === task.id);
     const tagIndex = taskTags.findIndex((t) => t === currentTag);
     taskTags[tagIndex] = editedTag;
     setTaskTags(taskTags);
     setCurrentTag();
-    const tasksFromStatus = mapStatusToTasksList[task.status];
-    const tasksSetter = mapStatusToTasksSetter[task.status];
 
-    const taskIndex = tasksFromStatus.findIndex((t) => t.id === task.id);
     tasksFromStatus[taskIndex].tags = taskTags;
 
     tasksSetter([

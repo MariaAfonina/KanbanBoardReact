@@ -1,9 +1,10 @@
 const Value = ({ name, styleName, chooseValue }) => {
-  function value() {
-    chooseValue(name);
-  }
   return (
-    <li data-name={name} className={styleName} onClick={value}>
+    <li
+      data-name={name}
+      className={styleName}
+      onClick={() => chooseValue(name)}
+    >
       {name}
     </li>
   );
