@@ -1,4 +1,4 @@
-import "./formTag.css";
+import "./FormTag.css";
 import { useState } from "react";
 
 const FormTag = ({ toggleFormTag, addTag, currentTag, updateTag }) => {

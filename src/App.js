@@ -5,9 +5,9 @@ import {
   createContext,
   useCallback,
 } from "react";
-import Header from "./components/header/Header";
-import Form from "./components/form/Form";
-import MainBlock from "./components/main/MainBlock";
+import Header from "./components/Header/Header";
+import Form from "./components/Form/Form";
+import MainBlock from "./components/Main/MainBlock";
 
 export const TaskContext = createContext();
 

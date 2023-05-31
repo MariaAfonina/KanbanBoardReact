@@ -1,4 +1,4 @@
-import "./header.css";
+import "./Header.css";
 import { useContext } from "react";
 import { TaskContext } from "../../App";
 

@@ -1,4 +1,4 @@
-import "./arrow.css";
+import "./Arrow.css";
 
 const Arrow = ({ toggleDropdown }) => {
   function handleClick(e) {

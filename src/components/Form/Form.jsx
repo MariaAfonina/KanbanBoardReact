@@ -1,9 +1,9 @@
-import "./form.css";
+import "./Form.css";
 import { v4 as uuidv4 } from "uuid";
 import { useState, useMemo, useContext } from "react";
-import Input from "../input/Input";
-import Assignee from "../dropdowns/Assignee";
-import Priority from "../dropdowns/Priority";
+import Input from "../Input/Input";
+import Assignee from "../Dropdowns/Assignee";
+import Priority from "../Dropdowns/Priority";
 import { TaskContext } from "../../App";
 
 const Form = ({

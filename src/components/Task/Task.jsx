@@ -1,6 +1,6 @@
-import "./task.css";
+import "./Task.css";
 import { useState, useContext } from "react";
-import FormTag from "../formTag/FormTag";
+import FormTag from "../FormTag/FormTag";
 import { TaskContext } from "../../App";
 
 const Task = ({

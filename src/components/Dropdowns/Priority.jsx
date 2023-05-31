@@ -1,5 +1,5 @@
-import "./dropdowns.css";
-import Arrow from "../arrow/Arrow";
+import "./Dropdowns.css";
+import Arrow from "../Arrow/Arrow";
 import Value from "./Value";
 import { useState } from "react";
 

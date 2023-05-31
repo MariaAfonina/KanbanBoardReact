@@ -1,7 +1,7 @@
-import "./mainBlock.css";
-import Task from "../task/Task";
+import "./MainBlock.css";
+import Task from "../Task/Task";
 import { useState } from "react";
-import useDragAndDrop from "./useDragAndDrop";
+import useDragAndDrop from "./UseDragAndDrop";
 
 const MainBlock = ({
   backlogTasks,
