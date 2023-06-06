@@ -1,19 +1,13 @@
-import "./form.css";
-import { v4 as uuidv4 } from "uuid";
-import { useState, useMemo, useContext } from "react";
-import Input from "../input/Input";
-import Assignee from "../dropdowns/Assignee";
-import Priority from "../dropdowns/Priority";
-import { TaskContext } from "../../App";
+import { useState, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addTask, updateTask } from "../../store/tasksSlice";
+import { isFormOpened, updateFormValue } from "../../store/formSlice";
+import Input from "../Input/Input";
+import Assignee from "../Dropdowns/Assignee";
+import Priority from "../Dropdowns/Priority";
+import "./Form.css";
 
-const Form = ({
-  taskToEdit,
-  setTaskToEdit,
-  backlogTasks,
-  setBacklogTasks,
-  mapStatusToTasksList,
-  mapStatusToTasksSetter,
-}) => {
+const Form = () => {
   const defaultTask = useMemo(
     () => ({
       id: "",
@@ -27,69 +21,47 @@ const Form = ({
     []
   );
 
-  const useTaskContext = useContext(TaskContext);
-  const [task, setTask] = useState(taskToEdit || defaultTask);
+  const formValue = useSelector((state) => state.form.formValue);
 
-  function updateTaskField(fieldName, value) {
+  const [task, setTask] = useState(formValue || defaultTask);
+
+  const dispatch = useDispatch();
+
+  const updateTaskField = (fieldName, value) => {
     setTask({ ...task, [fieldName]: value });
-  }
+  };
 
-  function addTask(e) {
+  const handleAddTask = (e) => {
     e.preventDefault();
-    const updatedStorage = [
-      ...backlogTasks,
-      {
-        id: uuidv4(),
-        status: "backlog",
-        title: task.title,
-        description: task.description,
-        assigned: task.assigned,
-        priority: task.priority,
-        date: task.date,
-      },
-    ];
-
-    useTaskContext.toggleForm();
+    dispatch(addTask({ task }));
     setTask(defaultTask);
-    setBacklogTasks(updatedStorage);
-  }
+    closeForm(e);
+  };
 
-  function updateTask(e) {
+  const closeForm = (e) => {
     e.preventDefault();
+    dispatch(isFormOpened());
+    dispatch(updateFormValue(false));
+  };
 
-    const tasksFromStatus = mapStatusToTasksList[task.status];
-    const setterFromStatus = mapStatusToTasksSetter[task.status];
-
-    const taskIndex = tasksFromStatus.findIndex(
-      (innerTask) => innerTask.id === task.id
-    );
-
-    setterFromStatus([
-      ...tasksFromStatus.slice(0, taskIndex),
-      task,
-      ...tasksFromStatus.slice(taskIndex + 1, tasksFromStatus.length),
-    ]);
-
-    useTaskContext.toggleForm();
-    setTaskToEdit();
-  }
-
-  function closeForm(e) {
+  const handleUpdateTask = (e) => {
     e.preventDefault();
-    useTaskContext.toggleForm();
-    setTaskToEdit();
-  }
+    dispatch(isFormOpened());
+    dispatch(updateFormValue(false));
+    dispatch(updateTask({ task }));
+  };
 
   return (
     <div className="add-form-wrapper">
       <form className="add-form">
-        {taskToEdit ? (
-          <h2 className="add-form-title">Update task</h2>
+        {formValue ? (
+          <h2 className="add-form-title">Update Task</h2>
         ) : (
           <h2 className="add-form-title">Add a New Task</h2>
         )}
-        <button className="button-delete form-btn-close" onClick={closeForm}>
-          <i className="fa-solid fa-xmark"></i>
+
+        <button className="button-delete form-btn-close">
+          <i className="fa-solid fa-xmark" onClick={closeForm}></i>
         </button>
 
         <Input
@@ -137,12 +109,13 @@ const Form = ({
           <button className="all-btn cancel-button" onClick={closeForm}>
             Cancel
           </button>
-          {taskToEdit ? (
-            <button className="all-btn add-button" onClick={updateTask}>
+
+          {formValue ? (
+            <button className="all-btn add-button" onClick={handleUpdateTask}>
               Update
             </button>
           ) : (
-            <button className="all-btn add-button" onClick={addTask}>
+            <button className="all-btn add-button" onClick={handleAddTask}>
               Add
             </button>
           )}

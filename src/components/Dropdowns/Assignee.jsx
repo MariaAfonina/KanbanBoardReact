@@ -1,5 +1,5 @@
-import Arrow from "../arrow/Arrow";
-import "./dropdowns.css";
+import Arrow from "../Arrow/Arrow";
+import "./Dropdowns.css";
 import Value from "./Value";
 import { useState } from "react";
 
@@ -7,15 +7,15 @@ const Assignee = ({ fieldName, value, setValue }) => {
   const [assignee, setAssignee] = useState(value);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
-  function chooseValue(name) {
+  const chooseValue = (name) => {
     setAssignee(name);
     setValue(fieldName, name);
     toggleDropdown();
-  }
+  };
 
-  function toggleDropdown() {
+  const toggleDropdown = () => {
     setIsDropdownOpened(!isDropdownOpened);
-  }
+  };
 
   return (
     <div className="add-form-parameter">

@@ -1,189 +1,73 @@
-import "./task.css";
-import { useState, useContext } from "react";
-import FormTag from "../formTag/FormTag";
-import { TaskContext } from "../../App";
+import { useDispatch } from "react-redux";
+import FormTag from "../FormTag/FormTag";
+import { deleteTask } from "../../store/tasksSlice";
+import { isFormOpened, updateFormValue } from "../../store/formSlice";
+import "./Task.css";
 
-const Task = ({
-  task,
-  setTaskId,
-  setTaskStatus,
-  mapStatusToTasksList,
-  mapStatusToTasksSetter,
-}) => {
-  const [isFormTagOpened, setIsFormTagOpened] = useState(false);
-  const [taskTags, setTaskTags] = useState(task.tags || []);
-  const [isEditTag, setIsEditTag] = useState(false);
-  const [currentTag, setCurrentTag] = useState();
-  const useTaskContext = useContext(TaskContext);
+const Task = ({ task, setTaskId, setTaskStatus }) => {
+  const dispatch = useDispatch();
 
-  function toggleFormTag() {
-    setIsFormTagOpened(!isFormTagOpened);
-    setCurrentTag();
-    setIsEditTag(false);
-  }
-
-  function handleTaskTag(tagValue) {
-    const tasksFromStatus = mapStatusToTasksList[task.status];
-    const tasksSetter = mapStatusToTasksSetter[task.status];
-
-    const taskIndex = tasksFromStatus.findIndex((t) => t.id === task.id);
-    const taskForTags = tasksFromStatus[taskIndex];
-    taskForTags.tags = [...taskTags, tagValue];
-
-    tasksSetter([
-      ...tasksFromStatus.slice(0, taskIndex),
-      taskForTags,
-      ...tasksFromStatus.slice(taskIndex + 1, tasksFromStatus.length),
-    ]);
-  }
-
-  function addTag(tagValue) {
-    const tags = [...taskTags, tagValue];
-    setTaskTags(tags);
-    toggleFormTag();
-    handleTaskTag(tagValue);
-  }
-
-  function deleteTag(tagIndex) {
-    const tasksFromStatus = mapStatusToTasksList[task.status];
-    const tasksSetter = mapStatusToTasksSetter[task.status];
-
-    const taskIndex = tasksFromStatus.findIndex((t) => t.id === task.id);
-    const tagsFromTaskIndex = tasksFromStatus[taskIndex].tags;
-    const tagFromIndex = tagsFromTaskIndex[tagIndex];
-    const tagsArray = tagsFromTaskIndex.filter((tag) => tag !== tagFromIndex);
-    tasksFromStatus[taskIndex].tags = tagsArray;
-
-    setTaskTags(tagsArray);
-
-    tasksSetter([
-      ...tasksFromStatus.slice(0, taskIndex),
-      tasksFromStatus[taskIndex],
-      ...tasksFromStatus.slice(taskIndex + 1, tasksFromStatus.length),
-    ]);
-  }
-
-  function handleFormToEditTag(tag) {
-    setCurrentTag(tag);
-    setIsFormTagOpened(!isFormTagOpened);
-  }
-
-  function updateTag(editedTag) {
-    const tasksFromStatus = mapStatusToTasksList[task.status];
-    const tasksSetter = mapStatusToTasksSetter[task.status];
-    const taskIndex = tasksFromStatus.findIndex((t) => t.id === task.id);
-    const tagIndex = taskTags.findIndex((t) => t === currentTag);
-    taskTags[tagIndex] = editedTag;
-    setTaskTags(taskTags);
-    setCurrentTag();
-
-    tasksFromStatus[taskIndex].tags = taskTags;
-
-    tasksSetter([
-      ...tasksFromStatus.slice(0, taskIndex),
-      tasksFromStatus[taskIndex],
-      ...tasksFromStatus.slice(taskIndex + 1, tasksFromStatus.length),
-    ]);
-
-    setIsFormTagOpened(!isFormTagOpened);
-  }
-
-  function editTask(e) {
+  const handleDeleteTask = (e) => {
     e.preventDefault();
-    useTaskContext.toggleForm();
-    useTaskContext.handleEditTask(task.id, task.status);
-  }
+    dispatch(deleteTask({ id: task.id, status: task.status }));
+  };
+
+  const handleEditTask = (e) => {
+    e.preventDefault();
+    dispatch(isFormOpened());
+    dispatch(updateFormValue({ task }));
+  };
+
+  const onDragStart = () => {
+    setTaskId(task.id);
+    setTaskStatus(task.status);
+  };
 
   return (
-    task && (
-      <div
-        onDragStart={() => {
-          setTaskId(task.id);
-          setTaskStatus(task.status);
-        }}
-        id={task.id}
-        className="task"
-        draggable={true}
-      >
-        <div className="btn-close-wrapper">
-          <div className="task-name">{task.title}</div>
-          <button
-            className="button-delete"
-            onClick={() => {
-              useTaskContext.onTaskDelete(task.id, task.status);
-            }}
-          >
-            <i className="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-
-        <div className="task-description">{task.description}</div>
-        <div className="task-wrapper">
-          <div className="task-parameter">Assigned:</div>
-          <div className="assigned-value">{task.assigned}</div>
-        </div>
-
-        <div className="task-wrapper">
-          <div className="task-parameter">Priority:</div>
-          <div
-            className={`priority-value priority-value-${task.priority.toLowerCase()}`}
-          >
-            {task.priority}
-          </div>
-        </div>
-
-        <div className="task-wrapper">
-          <div className="task-parameter">Due Date:</div>
-          <div className="date-value">{task.date}</div>
-        </div>
-
-        <div className="tag-edit-wrapper">
-          <button className="btn-add-tag" onClick={toggleFormTag}>
-            +Tag
-          </button>
-
-          <button className="btn-edit" onClick={editTask}>
-            <i className="fa-solid fa-pen"></i>
-          </button>
-        </div>
-        <div className="tags-wrapper">
-          {task.tags &&
-            task.tags.map((tag) => (
-              <div
-                key={taskTags.indexOf(tag)}
-                className="tag"
-                onClick={() => setIsEditTag(!isEditTag)}
-              >
-                # {tag}
-                {isEditTag && (
-                  <div className="btn-tag-wrapper">
-                    <button
-                      className="btn-delete-tag"
-                      onClick={() => deleteTag(taskTags.indexOf(tag))}
-                    >
-                      <i className="fa-solid fa-xmark"></i>
-                    </button>
-                    <button
-                      className="btn-edit-tag btn-edit"
-                      onClick={() => handleFormToEditTag(tag)}
-                    >
-                      <i className="fa-solid fa-pen"></i>
-                    </button>
-                  </div>
-                )}
-              </div>
-            ))}
-        </div>
-        {isFormTagOpened && (
-          <FormTag
-            currentTag={currentTag}
-            updateTag={updateTag}
-            addTag={addTag}
-            toggleFormTag={toggleFormTag}
-          />
-        )}
+    <div
+      onDragStart={onDragStart}
+      id={task.id}
+      className="task"
+      draggable={true}
+    >
+      <div className="btn-close-wrapper">
+        <div className="task-name">{task.title}</div>
+        <button className="button-delete">
+          <i className="fa-solid fa-xmark" onClick={handleDeleteTask}></i>
+        </button>
       </div>
-    )
+
+      <div className="task-description">{task.description}</div>
+      <div className="task-wrapper">
+        <div className="task-parameter">Assigned:</div>
+        <div className="assigned-value">{task.assigned}</div>
+      </div>
+
+      <div className="task-wrapper">
+        <div className="task-parameter">Priority:</div>
+        <div
+          className={`priority-value priority-value-${task.priority.toLowerCase()}`}
+        >
+          {task.priority}
+        </div>
+      </div>
+
+      <div className="task-wrapper">
+        <div className="task-parameter">Due Date:</div>
+        <div className="date-value">{task.date}</div>
+      </div>
+
+      <div className="tag-edit-wrapper">
+        <button className="btn-add-tag">+Tag</button>
+
+        <button className="btn-edit">
+          <i className="fa-solid fa-pen" onClick={handleEditTask}></i>
+        </button>
+      </div>
+      <div className="tags-wrapper"></div>
+
+      <FormTag />
+    </div>
   );
 };
 

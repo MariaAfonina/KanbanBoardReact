@@ -1,5 +1,5 @@
-import "./dropdowns.css";
-import Arrow from "../arrow/Arrow";
+import "./Dropdowns.css";
+import Arrow from "../Arrow/Arrow";
 import Value from "./Value";
 import { useState } from "react";
 
@@ -7,15 +7,15 @@ const Priority = ({ fieldName, value, setValue }) => {
   const [selectedPriority, setSelectedPriority] = useState(value);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
-  function chooseValue(name) {
+  const chooseValue = (name) => {
     setSelectedPriority(name);
     setValue(fieldName, name);
     toggleDropdown();
-  }
+  };
 
-  function toggleDropdown() {
+  const toggleDropdown = () => {
     setIsDropdownOpened(!isDropdownOpened);
-  }
+  };
 
   return (
     <div className="add-form-parameter">

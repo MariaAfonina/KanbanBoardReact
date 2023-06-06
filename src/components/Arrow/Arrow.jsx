@@ -1,10 +1,10 @@
-import "./arrow.css";
+import "./Arrow.css";
 
 const Arrow = ({ toggleDropdown }) => {
-  function handleClick(e) {
+  const handleClick = (e) => {
     e.preventDefault();
     toggleDropdown();
-  }
+  };
 
   return (
     <button className="btn-icon-arrow" onClick={handleClick}>

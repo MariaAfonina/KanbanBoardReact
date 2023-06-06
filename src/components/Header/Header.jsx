@@ -1,9 +1,14 @@
-import "./header.css";
-import { useContext } from "react";
-import { TaskContext } from "../../App";
+import { useDispatch } from "react-redux";
+import { isFormOpened } from "../../store/formSlice";
+import "./Header.css";
 
 const Header = () => {
-  const { toggleForm } = useContext(TaskContext);
+  const dispatch = useDispatch();
+
+  const toggleForm = (e) => {
+    e.preventDefault();
+    dispatch(isFormOpened());
+  };
 
   return (
     <header>

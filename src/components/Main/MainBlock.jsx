@@ -1,24 +1,31 @@
-import "./mainBlock.css";
-import Task from "../task/Task";
+import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
-import useDragAndDrop from "./useDragAndDrop";
+import { dragAndDrop } from "../../store/tasksSlice";
+import Task from "../Task/Task";
+import "./MainBlock.css";
 
-const MainBlock = ({
-  backlogTasks,
-  inProgressTasks,
-  doneTasks,
-  mapStatusToTasksList,
-  mapStatusToTasksSetter,
-}) => {
+const MainBlock = () => {
+  const backlogTasks = useSelector((state) => state.tasks.backlog);
+  const inProgressTasks = useSelector((state) => state.tasks.inProgress);
+  const doneTasks = useSelector((state) => state.tasks.done);
+
   const [taskId, setTaskId] = useState();
   const [taskStatus, setTaskStatus] = useState();
 
-  const { onDragOver, onDropTask } = useDragAndDrop(
-    taskId,
-    taskStatus,
-    mapStatusToTasksList,
-    mapStatusToTasksSetter
-  );
+  const dispatch = useDispatch();
+
+  const onDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  const onDropTask = (e) => {
+    const nextGroupName = e.currentTarget.dataset.taskGroupStatus;
+    dispatch(
+      dragAndDrop({ id: taskId, status: taskStatus, newStatus: nextGroupName })
+    );
+    setTaskId("");
+    setTaskStatus("");
+  };
 
   return (
     <main className="tasks-block">
@@ -34,8 +41,6 @@ const MainBlock = ({
             key={task.id}
             setTaskId={setTaskId}
             setTaskStatus={setTaskStatus}
-            mapStatusToTasksList={mapStatusToTasksList}
-            mapStatusToTasksSetter={mapStatusToTasksSetter}
           />
         ))}
       </div>
@@ -51,8 +56,6 @@ const MainBlock = ({
             key={task.id}
             setTaskId={setTaskId}
             setTaskStatus={setTaskStatus}
-            mapStatusToTasksList={mapStatusToTasksList}
-            mapStatusToTasksSetter={mapStatusToTasksSetter}
           />
         ))}
       </div>
@@ -68,8 +71,6 @@ const MainBlock = ({
             key={task.id}
             setTaskId={setTaskId}
             setTaskStatus={setTaskStatus}
-            mapStatusToTasksList={mapStatusToTasksList}
-            mapStatusToTasksSetter={mapStatusToTasksSetter}
           />
         ))}
       </div>
