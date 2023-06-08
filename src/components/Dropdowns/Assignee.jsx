@@ -1,7 +1,7 @@
-import Arrow from "../Arrow/Arrow";
-import "./Dropdowns.css";
-import Value from "./Value";
 import { useState } from "react";
+import Arrow from "../Arrow/Arrow";
+import Value from "./Value";
+import "./Dropdowns.css";
 
 const Assignee = ({ fieldName, value, setValue }) => {
   const [assignee, setAssignee] = useState(value);

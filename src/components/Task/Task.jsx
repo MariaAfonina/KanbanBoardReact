@@ -1,10 +1,17 @@
-import { useDispatch } from "react-redux";
-import FormTag from "../FormTag/FormTag";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteTask } from "../../store/tasksSlice";
-import { isFormOpened, updateFormValue } from "../../store/formSlice";
+import {
+  isFormOpened,
+  isTagInputOpened,
+  updateFormValue,
+} from "../../store/formSlice";
+import TagInput from "../Tag/TagInput";
+import Tag from "../Tag/Tag";
 import "./Task.css";
 
 const Task = ({ task, setTaskId, setTaskStatus }) => {
+  const tagInput = useSelector((state) => state.form.isTagInput);
+
   const dispatch = useDispatch();
 
   const handleDeleteTask = (e) => {
@@ -16,6 +23,11 @@ const Task = ({ task, setTaskId, setTaskStatus }) => {
     e.preventDefault();
     dispatch(isFormOpened());
     dispatch(updateFormValue({ task }));
+  };
+
+  const handleTagInput = (e) => {
+    e.preventDefault();
+    dispatch(isTagInputOpened());
   };
 
   const onDragStart = () => {
@@ -30,7 +42,7 @@ const Task = ({ task, setTaskId, setTaskStatus }) => {
       className="task"
       draggable={true}
     >
-      <div className="btn-close-wrapper">
+      <div className="btn-delete-wrapper">
         <div className="task-name">{task.title}</div>
         <button className="button-delete">
           <i className="fa-solid fa-xmark" onClick={handleDeleteTask}></i>
@@ -58,15 +70,19 @@ const Task = ({ task, setTaskId, setTaskStatus }) => {
       </div>
 
       <div className="tag-edit-wrapper">
-        <button className="btn-add-tag">+Tag</button>
+        <button className="btn-add-tag" onClick={handleTagInput}>
+          +Tag
+        </button>
 
-        <button className="btn-edit">
+        <button className="btn-edit-task">
           <i className="fa-solid fa-pen" onClick={handleEditTask}></i>
         </button>
       </div>
-      <div className="tags-wrapper"></div>
 
-      <FormTag />
+      {tagInput && <TagInput taskId={task.id} taskStatus={task.status} />}
+      {task.tags.map((tag, index) => (
+        <Tag key={index} tag={tag} taskId={task.id} taskStatus={task.status} />
+      ))}
     </div>
   );
 };

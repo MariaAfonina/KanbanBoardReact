@@ -1,7 +1,7 @@
-import "./Dropdowns.css";
+import { useState } from "react";
 import Arrow from "../Arrow/Arrow";
 import Value from "./Value";
-import { useState } from "react";
+import "./Dropdowns.css";
 
 const Priority = ({ fieldName, value, setValue }) => {
   const [selectedPriority, setSelectedPriority] = useState(value);

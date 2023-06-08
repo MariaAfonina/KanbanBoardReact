@@ -1,0 +1,31 @@
+.add-tag-input {
+  width: 95%;
+  height: 20px;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  border-radius: 5px;
+  color: #455266;
+}
+
+.tag {
+  display: inline-block;
+  color: #455266;
+  font-weight: 400;
+  font-size: 12px;
+  background: #f5f8fa;
+  border-radius: 100px;
+  border: none;
+  padding: 3px;
+  margin: 5px 3px 0px 0px;
+  cursor: pointer;
+}
+
+.delete-tag {
+  border: none;
+  color: #455266;
+  background: #f5f8fa;
+  padding: 0px;
+  padding-left: 3px;
+  font-weight: 400;
+  font-size: 12px;
+}

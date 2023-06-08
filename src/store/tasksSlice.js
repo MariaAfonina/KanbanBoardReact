@@ -18,6 +18,7 @@ const tasksSlice = createSlice({
         assigned: action.payload.task.assigned,
         priority: action.payload.task.priority,
         date: action.payload.task.date,
+        tags: [],
       });
     },
     deleteTask(state, action) {
@@ -52,10 +53,34 @@ const tasksSlice = createSlice({
         );
       }
     },
+    addTag(state, action) {
+      const taskStatus = action.payload.status;
+      const taskIndex = state[taskStatus].findIndex(
+        (task) => task.id === action.payload.id
+      );
+      const currentState = state[taskStatus];
+      currentState[taskIndex].tags.push(action.payload.tag);
+    },
+    deleteTag(state, action) {
+      const taskStatus = action.payload.status;
+      const currentState = state[taskStatus];
+      const taskIndex = state[taskStatus].findIndex(
+        (task) => task.id === action.payload.id
+      );
+      currentState[taskIndex].tags = currentState[taskIndex].tags.filter(
+        (tag) => tag !== action.payload.tag
+      );
+    },
   },
 });
 
-export const { addTask, deleteTask, updateTask, dragAndDrop } =
-  tasksSlice.actions;
+export const {
+  addTask,
+  deleteTask,
+  updateTask,
+  dragAndDrop,
+  addTag,
+  deleteTag,
+} = tasksSlice.actions;
 
 export default tasksSlice.reducer;
