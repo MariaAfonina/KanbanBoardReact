@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { deleteTag } from "../../store/tasksSlice";
 
-const Tag = ({ tag, taskId, taskStatus, tagIndex }) => {
+const Tag = ({ tag, taskId }) => {
   const dispatch = useDispatch();
 
   const handleDeleteTag = () => {
@@ -9,7 +9,6 @@ const Tag = ({ tag, taskId, taskStatus, tagIndex }) => {
       deleteTag({
         tag: tag,
         id: taskId,
-        status: taskStatus,
       })
     );
   };

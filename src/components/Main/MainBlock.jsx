@@ -1,16 +1,17 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
+import { getTasks } from "../../store/tasksSelectors";
 import { dragAndDrop } from "../../store/tasksSlice";
 import Task from "../Task/Task";
 import "./MainBlock.css";
 
 const MainBlock = () => {
-  const backlogTasks = useSelector((state) => state.tasks.backlog);
-  const inProgressTasks = useSelector((state) => state.tasks.inProgress);
-  const doneTasks = useSelector((state) => state.tasks.done);
+  const tasks = useSelector(getTasks);
+  const backlogTasks = tasks.filter((task) => task.status === "backlog");
+  const inProgressTasks = tasks.filter((task) => task.status === "inProgress");
+  const doneTasks = tasks.filter((task) => task.status === "done");
 
   const [taskId, setTaskId] = useState();
-  const [taskStatus, setTaskStatus] = useState();
 
   const dispatch = useDispatch();
 
@@ -20,11 +21,8 @@ const MainBlock = () => {
 
   const onDropTask = (e) => {
     const nextGroupName = e.currentTarget.dataset.taskGroupStatus;
-    dispatch(
-      dragAndDrop({ id: taskId, status: taskStatus, newStatus: nextGroupName })
-    );
+    dispatch(dragAndDrop({ id: taskId, newStatus: nextGroupName }));
     setTaskId("");
-    setTaskStatus("");
   };
 
   return (
@@ -36,12 +34,7 @@ const MainBlock = () => {
       >
         <h2 className="task-title">Backlog</h2>
         {backlogTasks.map((task) => (
-          <Task
-            task={task}
-            key={task.id}
-            setTaskId={setTaskId}
-            setTaskStatus={setTaskStatus}
-          />
+          <Task task={task} key={task.id} setTaskId={setTaskId} />
         ))}
       </div>
       <div
@@ -51,12 +44,7 @@ const MainBlock = () => {
       >
         <h2 className="task-title">In progress</h2>
         {inProgressTasks.map((task) => (
-          <Task
-            task={task}
-            key={task.id}
-            setTaskId={setTaskId}
-            setTaskStatus={setTaskStatus}
-          />
+          <Task task={task} key={task.id} setTaskId={setTaskId} />
         ))}
       </div>
       <div
@@ -66,12 +54,7 @@ const MainBlock = () => {
       >
         <h2 className="task-title">Done</h2>
         {doneTasks.map((task) => (
-          <Task
-            task={task}
-            key={task.id}
-            setTaskId={setTaskId}
-            setTaskStatus={setTaskStatus}
-          />
+          <Task task={task} key={task.id} setTaskId={setTaskId} />
         ))}
       </div>
     </main>

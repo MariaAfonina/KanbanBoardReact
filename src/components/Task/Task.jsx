@@ -1,22 +1,19 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { deleteTask } from "../../store/tasksSlice";
-import {
-  isFormOpened,
-  isTagInputOpened,
-  updateFormValue,
-} from "../../store/formSlice";
+import { isFormOpened, updateFormValue } from "../../store/formSlice";
 import TagInput from "../Tag/TagInput";
 import Tag from "../Tag/Tag";
 import "./Task.css";
 
-const Task = ({ task, setTaskId, setTaskStatus }) => {
-  const tagInput = useSelector((state) => state.form.isTagInput);
+const Task = ({ task, setTaskId }) => {
+  const [isTagInputOpened, setIsTagInputOpened] = useState(false);
 
   const dispatch = useDispatch();
 
   const handleDeleteTask = (e) => {
     e.preventDefault();
-    dispatch(deleteTask({ id: task.id, status: task.status }));
+    dispatch(deleteTask(task.id));
   };
 
   const handleEditTask = (e) => {
@@ -27,12 +24,11 @@ const Task = ({ task, setTaskId, setTaskStatus }) => {
 
   const handleTagInput = (e) => {
     e.preventDefault();
-    dispatch(isTagInputOpened());
+    setIsTagInputOpened(!isTagInputOpened);
   };
 
   const onDragStart = () => {
     setTaskId(task.id);
-    setTaskStatus(task.status);
   };
 
   return (
@@ -79,9 +75,11 @@ const Task = ({ task, setTaskId, setTaskStatus }) => {
         </button>
       </div>
 
-      {tagInput && <TagInput taskId={task.id} taskStatus={task.status} />}
+      {isTagInputOpened && (
+        <TagInput taskId={task.id} setIsTagInputOpened={setIsTagInputOpened} />
+      )}
       {task.tags.map((tag, index) => (
-        <Tag key={index} tag={tag} taskId={task.id} taskStatus={task.status} />
+        <Tag key={index} tag={tag} taskId={task.id} />
       ))}
     </div>
   );

@@ -1,17 +1,16 @@
 import { useDispatch } from "react-redux";
 import { addTag } from "../../store/tasksSlice";
-import { isTagInputOpened } from "../../store/formSlice";
 import "./Tag.css";
 
-const TagInput = ({ taskId, taskStatus }) => {
+const TagInput = ({ taskId, setIsTagInputOpened }) => {
   const dispatch = useDispatch();
 
   const handleKeyDown = (e) => {
     if (e.key !== "Enter") return;
     const value = e.target.value.trim();
     if (!value.trim()) return;
-    dispatch(addTag({ id: taskId, status: taskStatus, tag: value }));
-    dispatch(isTagInputOpened());
+    dispatch(addTag({ id: taskId, tag: value }));
+    setIsTagInputOpened(false);
     e.target.value = "";
   };
 

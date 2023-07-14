@@ -5,22 +5,12 @@ import Form from "./components/Form/Form";
 import MainBlock from "./components/Main/MainBlock";
 
 function App() {
-  const backlogTasks = useSelector((state) => state.tasks.backlog);
-  const inProgressTasks = useSelector((state) => state.tasks.inProgress);
-  const doneTasks = useSelector((state) => state.tasks.done);
+  const tasks = useSelector((state) => state.tasks.tasks);
   const isFormOpened = useSelector((state) => state.form.isForm);
 
   useEffect(() => {
-    localStorage.setItem("backlog", JSON.stringify(backlogTasks));
-  }, [backlogTasks]);
-
-  useEffect(() => {
-    localStorage.setItem("inProgress", JSON.stringify(inProgressTasks));
-  }, [inProgressTasks]);
-
-  useEffect(() => {
-    localStorage.setItem("done", JSON.stringify(doneTasks));
-  }, [doneTasks]);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   return (
     <div>

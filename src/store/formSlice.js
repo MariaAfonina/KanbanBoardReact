@@ -5,7 +5,6 @@ const formSlice = createSlice({
   initialState: {
     isForm: false,
     formValue: "",
-    isTagInput: false,
   },
   reducers: {
     isFormOpened(state) {
@@ -14,13 +13,9 @@ const formSlice = createSlice({
     updateFormValue(state, action) {
       state.formValue = action.payload.task;
     },
-    isTagInputOpened(state) {
-      state.isTagInput = !state.isTagInput;
-    },
   },
 });
 
-export const { isFormOpened, updateFormValue, isTagInputOpened } =
-  formSlice.actions;
+export const { isFormOpened, updateFormValue } = formSlice.actions;
 
 export default formSlice.reducer;

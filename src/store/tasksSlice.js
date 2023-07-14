@@ -4,13 +4,11 @@ import { v4 as uuidv4 } from "uuid";
 const tasksSlice = createSlice({
   name: "tasks",
   initialState: {
-    backlog: JSON.parse(localStorage.getItem("backlog")) || [],
-    inProgress: JSON.parse(localStorage.getItem("inProgress")) || [],
-    done: JSON.parse(localStorage.getItem("done")) || [],
+    tasks: JSON.parse(localStorage.getItem("tasks")) || [],
   },
   reducers: {
     addTask(state, action) {
-      state.backlog.push({
+      state.tasks.push({
         id: uuidv4(),
         status: "backlog",
         title: action.payload.task.title,
@@ -22,52 +20,35 @@ const tasksSlice = createSlice({
       });
     },
     deleteTask(state, action) {
-      const taskStatus = action.payload.status;
-      state[taskStatus] = state[taskStatus].filter(
-        (task) => task.id !== action.payload.id
-      );
+      state.tasks = state.tasks.filter((task) => task.id !== action.payload);
     },
     updateTask(state, action) {
-      const taskStatus = action.payload.task.status;
-      const taskIndex = state[taskStatus].findIndex(
+      const taskIndex = state.tasks.findIndex(
         (task) => task.id === action.payload.task.id
       );
-      state[taskStatus] = [
-        ...state[taskStatus].slice(0, taskIndex),
+      state.tasks = [
+        ...state.tasks.slice(0, taskIndex),
         action.payload.task,
-        ...state[taskStatus].slice(taskIndex + 1, state[taskStatus].length),
+        ...state.tasks.slice(taskIndex + 1, state.tasks.length),
       ];
     },
     dragAndDrop(state, action) {
-      const previousStatus = action.payload.status;
-      const nextStatus = action.payload.newStatus;
-      if (previousStatus !== nextStatus) {
-        const taskIndex = state[previousStatus].findIndex(
-          (task) => task.id === action.payload.id
-        );
-        const previousState = state[previousStatus];
-        previousState[taskIndex].status = nextStatus;
-        state[nextStatus].push(previousState[taskIndex]);
-        state[previousStatus] = state[previousStatus].filter(
-          (task) => task.id !== action.payload.id
-        );
-      }
+      const taskIndex = state.tasks.findIndex(
+        (task) => task.id === action.payload.id
+      );
+      state.tasks[taskIndex].status = action.payload.newStatus;
     },
     addTag(state, action) {
-      const taskStatus = action.payload.status;
-      const taskIndex = state[taskStatus].findIndex(
+      const taskIndex = state.tasks.findIndex(
         (task) => task.id === action.payload.id
       );
-      const currentState = state[taskStatus];
-      currentState[taskIndex].tags.push(action.payload.tag);
+      state.tasks[taskIndex].tags.push(action.payload.tag);
     },
     deleteTag(state, action) {
-      const taskStatus = action.payload.status;
-      const currentState = state[taskStatus];
-      const taskIndex = state[taskStatus].findIndex(
+      const taskIndex = state.tasks.findIndex(
         (task) => task.id === action.payload.id
       );
-      currentState[taskIndex].tags = currentState[taskIndex].tags.filter(
+      state.tasks[taskIndex].tags = state.tasks[taskIndex].tags.filter(
         (tag) => tag !== action.payload.tag
       );
     },

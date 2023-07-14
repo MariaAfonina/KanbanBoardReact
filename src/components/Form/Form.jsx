@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getFormValue } from "../../store/formSelectors";
 import { addTask, updateTask } from "../../store/tasksSlice";
 import { isFormOpened, updateFormValue } from "../../store/formSlice";
 import Input from "../Input/Input";
@@ -21,7 +22,7 @@ const Form = () => {
     []
   );
 
-  const formValue = useSelector((state) => state.form.formValue);
+  const formValue = useSelector(getFormValue);
 
   const [task, setTask] = useState(formValue || defaultTask);
 

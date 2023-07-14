@@ -17,7 +17,6 @@
   border: none;
   padding: 3px;
   margin: 5px 3px 0px 0px;
-  cursor: pointer;
 }
 
 .btn-delete-tag {
@@ -28,4 +27,5 @@
   padding-left: 3px;
   font-weight: 400;
   font-size: 12px;
+  cursor: pointer;
 }
