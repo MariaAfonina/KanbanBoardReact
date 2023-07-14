@@ -1,9 +1,9 @@
-const useDragAndDrop = (
-  taskId,
-  taskStatus,
-  mapStatusToTasksList,
-  mapStatusToTasksSetter
-) => {
+import { useContext } from "react";
+import { TaskContext } from "../../App";
+
+const useDragAndDrop = (taskId, taskStatus) => {
+  const useTaskContext = useContext(TaskContext);
+
   function onDragOver(event) {
     event.preventDefault();
   }
@@ -12,11 +12,14 @@ const useDragAndDrop = (
     const nextGroupName = event.currentTarget.dataset.taskGroupStatus;
 
     if (taskStatus !== nextGroupName) {
-      const tasksFromStatus = mapStatusToTasksList[taskStatus];
-      const setterFromStatus = mapStatusToTasksSetter[taskStatus];
+      const tasksFromStatus = useTaskContext.mapStatusToTasksList[taskStatus];
+      const setterFromStatus =
+        useTaskContext.mapStatusToTasksSetter[taskStatus];
 
-      const tasksFromNextGroupName = mapStatusToTasksList[nextGroupName];
-      const setterFromNextGroupName = mapStatusToTasksSetter[nextGroupName];
+      const tasksFromNextGroupName =
+        useTaskContext.mapStatusToTasksList[nextGroupName];
+      const setterFromNextGroupName =
+        useTaskContext.mapStatusToTasksSetter[nextGroupName];
 
       const tasksGroup =
         tasksFromStatus[

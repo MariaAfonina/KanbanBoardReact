@@ -1,5 +1,5 @@
-import "./FormTag.css";
 import { useState } from "react";
+import "./FormTag.css";
 
 const FormTag = ({ toggleFormTag, addTag, currentTag, updateTag }) => {
   const [tagValue, setTagValue] = useState(currentTag || "");

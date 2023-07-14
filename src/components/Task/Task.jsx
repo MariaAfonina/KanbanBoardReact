@@ -1,15 +1,9 @@
-import "./Task.css";
 import { useState, useContext } from "react";
 import FormTag from "../FormTag/FormTag";
 import { TaskContext } from "../../App";
+import "./Task.css";
 
-const Task = ({
-  task,
-  setTaskId,
-  setTaskStatus,
-  mapStatusToTasksList,
-  mapStatusToTasksSetter,
-}) => {
+const Task = ({ task, setTaskId, setTaskStatus }) => {
   const [isFormTagOpened, setIsFormTagOpened] = useState(false);
   const [taskTags, setTaskTags] = useState(task.tags || []);
   const [isEditTag, setIsEditTag] = useState(false);
@@ -23,8 +17,8 @@ const Task = ({
   }
 
   function handleTaskTag(tagValue) {
-    const tasksFromStatus = mapStatusToTasksList[task.status];
-    const tasksSetter = mapStatusToTasksSetter[task.status];
+    const tasksFromStatus = useTaskContext.mapStatusToTasksList[task.status];
+    const tasksSetter = useTaskContext.mapStatusToTasksSetter[task.status];
 
     const taskIndex = tasksFromStatus.findIndex((t) => t.id === task.id);
     const taskForTags = tasksFromStatus[taskIndex];
@@ -45,8 +39,8 @@ const Task = ({
   }
 
   function deleteTag(tagIndex) {
-    const tasksFromStatus = mapStatusToTasksList[task.status];
-    const tasksSetter = mapStatusToTasksSetter[task.status];
+    const tasksFromStatus = useTaskContext.mapStatusToTasksList[task.status];
+    const tasksSetter = useTaskContext.mapStatusToTasksSetter[task.status];
 
     const taskIndex = tasksFromStatus.findIndex((t) => t.id === task.id);
     const tagsFromTaskIndex = tasksFromStatus[taskIndex].tags;
@@ -69,8 +63,8 @@ const Task = ({
   }
 
   function updateTag(editedTag) {
-    const tasksFromStatus = mapStatusToTasksList[task.status];
-    const tasksSetter = mapStatusToTasksSetter[task.status];
+    const tasksFromStatus = useTaskContext.mapStatusToTasksList[task.status];
+    const tasksSetter = useTaskContext.mapStatusToTasksSetter[task.status];
     const taskIndex = tasksFromStatus.findIndex((t) => t.id === task.id);
     const tagIndex = taskTags.findIndex((t) => t === currentTag);
     taskTags[tagIndex] = editedTag;

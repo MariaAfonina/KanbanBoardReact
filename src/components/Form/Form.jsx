@@ -1,19 +1,12 @@
-import "./Form.css";
-import { v4 as uuidv4 } from "uuid";
 import { useState, useMemo, useContext } from "react";
+import { v4 as uuidv4 } from "uuid";
 import Input from "../Input/Input";
 import Assignee from "../Dropdowns/Assignee";
 import Priority from "../Dropdowns/Priority";
 import { TaskContext } from "../../App";
+import "./Form.css";
 
-const Form = ({
-  taskToEdit,
-  setTaskToEdit,
-  backlogTasks,
-  setBacklogTasks,
-  mapStatusToTasksList,
-  mapStatusToTasksSetter,
-}) => {
+const Form = ({ taskToEdit, setTaskToEdit, backlogTasks, setBacklogTasks }) => {
   const defaultTask = useMemo(
     () => ({
       id: "",
@@ -28,6 +21,7 @@ const Form = ({
   );
 
   const useTaskContext = useContext(TaskContext);
+
   const [task, setTask] = useState(taskToEdit || defaultTask);
 
   function updateTaskField(fieldName, value) {
@@ -57,8 +51,8 @@ const Form = ({
   function updateTask(e) {
     e.preventDefault();
 
-    const tasksFromStatus = mapStatusToTasksList[task.status];
-    const setterFromStatus = mapStatusToTasksSetter[task.status];
+    const tasksFromStatus = useTaskContext.mapStatusToTasksList[task.status];
+    const setterFromStatus = useTaskContext.mapStatusToTasksSetter[task.status];
 
     const taskIndex = tasksFromStatus.findIndex(
       (innerTask) => innerTask.id === task.id

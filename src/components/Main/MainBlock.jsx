@@ -1,24 +1,13 @@
-import "./MainBlock.css";
-import Task from "../Task/Task";
 import { useState } from "react";
-import useDragAndDrop from "./UseDragAndDrop";
+import Task from "../Task/Task";
+import useDragAndDrop from "./useDragAndDrop";
+import "./MainBlock.css";
 
-const MainBlock = ({
-  backlogTasks,
-  inProgressTasks,
-  doneTasks,
-  mapStatusToTasksList,
-  mapStatusToTasksSetter,
-}) => {
+const MainBlock = ({ backlogTasks, inProgressTasks, doneTasks }) => {
   const [taskId, setTaskId] = useState();
   const [taskStatus, setTaskStatus] = useState();
 
-  const { onDragOver, onDropTask } = useDragAndDrop(
-    taskId,
-    taskStatus,
-    mapStatusToTasksList,
-    mapStatusToTasksSetter
-  );
+  const { onDragOver, onDropTask } = useDragAndDrop(taskId, taskStatus);
 
   return (
     <main className="tasks-block">
@@ -34,8 +23,6 @@ const MainBlock = ({
             key={task.id}
             setTaskId={setTaskId}
             setTaskStatus={setTaskStatus}
-            mapStatusToTasksList={mapStatusToTasksList}
-            mapStatusToTasksSetter={mapStatusToTasksSetter}
           />
         ))}
       </div>
@@ -51,8 +38,6 @@ const MainBlock = ({
             key={task.id}
             setTaskId={setTaskId}
             setTaskStatus={setTaskStatus}
-            mapStatusToTasksList={mapStatusToTasksList}
-            mapStatusToTasksSetter={mapStatusToTasksSetter}
           />
         ))}
       </div>
@@ -68,8 +53,6 @@ const MainBlock = ({
             key={task.id}
             setTaskId={setTaskId}
             setTaskStatus={setTaskStatus}
-            mapStatusToTasksList={mapStatusToTasksList}
-            mapStatusToTasksSetter={mapStatusToTasksSetter}
           />
         ))}
       </div>

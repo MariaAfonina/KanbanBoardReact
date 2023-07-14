@@ -87,6 +87,8 @@ function App() {
         toggleForm,
         handleEditTask,
         onTaskDelete,
+        mapStatusToTasksList,
+        mapStatusToTasksSetter,
       }}
     >
       <div>
@@ -97,8 +99,6 @@ function App() {
             setTaskToEdit={setTaskToEdit}
             backlogTasks={backlogTasks}
             setBacklogTasks={setBacklogTasks}
-            mapStatusToTasksList={mapStatusToTasksList}
-            mapStatusToTasksSetter={mapStatusToTasksSetter}
           />
         )}
 
@@ -106,8 +106,6 @@ function App() {
           backlogTasks={backlogTasks}
           inProgressTasks={inProgressTasks}
           doneTasks={doneTasks}
-          mapStatusToTasksList={mapStatusToTasksList}
-          mapStatusToTasksSetter={mapStatusToTasksSetter}
         />
       </div>
     </TaskContext.Provider>
