@@ -1,13 +1,13 @@
 import { useState } from "react";
 import Task from "../Task/Task";
-import useDragAndDrop from "./useDragAndDrop";
+import UseDragAndDrop from "./UseDragAndDrop";
 import "./MainBlock.css";
 
 const MainBlock = ({ backlogTasks, inProgressTasks, doneTasks }) => {
   const [taskId, setTaskId] = useState();
   const [taskStatus, setTaskStatus] = useState();
 
-  const { onDragOver, onDropTask } = useDragAndDrop(taskId, taskStatus);
+  const { onDragOver, onDropTask } = UseDragAndDrop(taskId, taskStatus);
 
   return (
     <main className="tasks-block">
