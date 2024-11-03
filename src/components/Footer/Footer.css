@@ -1,0 +1,17 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 100px;
+  align-items: center;
+}
+
+.addiional-button {
+  font-size: 16px;
+  background-color: rgb(169, 221, 229);
+  width: 250px;
+  height: 43px;
+}
+
+.addiional-button:hover {
+  background: rgb(64, 216, 239);
+}

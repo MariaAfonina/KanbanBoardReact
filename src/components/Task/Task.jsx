@@ -1,9 +1,11 @@
 import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import FormTag from "../FormTag/FormTag";
-import { TaskContext } from "../../App";
+import { TaskContext } from "../../AppContainer";
 import "./Task.css";
 
 const Task = ({ task, setTaskId, setTaskStatus }) => {
+  const navigate = useNavigate();
   const [isFormTagOpened, setIsFormTagOpened] = useState(false);
   const [taskTags, setTaskTags] = useState(task.tags || []);
   const [isEditTag, setIsEditTag] = useState(false);
@@ -84,7 +86,7 @@ const Task = ({ task, setTaskId, setTaskStatus }) => {
 
   function editTask(e) {
     e.preventDefault();
-    useTaskContext.toggleForm();
+    navigate(`/task/edit/${task.title}`);
     useTaskContext.handleEditTask(task.id, task.status);
   }
 
@@ -104,7 +106,7 @@ const Task = ({ task, setTaskId, setTaskStatus }) => {
           <button
             className="button-delete"
             onClick={() => {
-              useTaskContext.onTaskDelete(task.id, task.status);
+              useTaskContext.onTaskDelete(task.id, task.status, task.title);
             }}
           >
             <i className="fa-solid fa-xmark"></i>

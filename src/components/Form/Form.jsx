@@ -1,12 +1,15 @@
 import { useState, useMemo, useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import Input from "../Input/Input";
 import Assignee from "../Dropdowns/Assignee";
 import Priority from "../Dropdowns/Priority";
-import { TaskContext } from "../../App";
+import { TaskContext } from "../../AppContainer";
 import "./Form.css";
 
-const Form = ({ taskToEdit, setTaskToEdit, backlogTasks, setBacklogTasks }) => {
+const Form = () => {
+  const params = useParams();
+  const navigate = useNavigate();
   const defaultTask = useMemo(
     () => ({
       id: "",
@@ -20,7 +23,14 @@ const Form = ({ taskToEdit, setTaskToEdit, backlogTasks, setBacklogTasks }) => {
     []
   );
 
-  const useTaskContext = useContext(TaskContext);
+  const {
+    taskToEdit,
+    backlogTasks,
+    setBacklogTasks,
+    mapStatusToTasksList,
+    mapStatusToTasksSetter,
+    setTaskToEdit,
+  } = useContext(TaskContext);
 
   const [task, setTask] = useState(taskToEdit || defaultTask);
 
@@ -43,16 +53,17 @@ const Form = ({ taskToEdit, setTaskToEdit, backlogTasks, setBacklogTasks }) => {
       },
     ];
 
-    useTaskContext.toggleForm();
+    navigate(-1);
     setTask(defaultTask);
     setBacklogTasks(updatedStorage);
+    alert("You added new task! Good job!");
   }
 
   function updateTask(e) {
     e.preventDefault();
 
-    const tasksFromStatus = useTaskContext.mapStatusToTasksList[task.status];
-    const setterFromStatus = useTaskContext.mapStatusToTasksSetter[task.status];
+    const tasksFromStatus = mapStatusToTasksList[task.status];
+    const setterFromStatus = mapStatusToTasksSetter[task.status];
 
     const taskIndex = tasksFromStatus.findIndex(
       (innerTask) => innerTask.id === task.id
@@ -64,13 +75,13 @@ const Form = ({ taskToEdit, setTaskToEdit, backlogTasks, setBacklogTasks }) => {
       ...tasksFromStatus.slice(taskIndex + 1, tasksFromStatus.length),
     ]);
 
-    useTaskContext.toggleForm();
+    navigate(-1);
     setTaskToEdit();
   }
 
   function closeForm(e) {
     e.preventDefault();
-    useTaskContext.toggleForm();
+    navigate(-1);
     setTaskToEdit();
   }
 
@@ -78,14 +89,13 @@ const Form = ({ taskToEdit, setTaskToEdit, backlogTasks, setBacklogTasks }) => {
     <div className="add-form-wrapper">
       <form className="add-form">
         {taskToEdit ? (
-          <h2 className="add-form-title">Update task</h2>
+          <h2 className="add-form-title">Update {params.title} task</h2>
         ) : (
           <h2 className="add-form-title">Add a New Task</h2>
         )}
         <button className="button-delete form-btn-close" onClick={closeForm}>
           <i className="fa-solid fa-xmark"></i>
         </button>
-
         <Input
           name="title"
           label="Task title"
@@ -95,7 +105,6 @@ const Form = ({ taskToEdit, setTaskToEdit, backlogTasks, setBacklogTasks }) => {
           value={task.title}
           setValue={updateTaskField}
         />
-
         <Input
           name="description"
           label="Task description"
@@ -105,19 +114,16 @@ const Form = ({ taskToEdit, setTaskToEdit, backlogTasks, setBacklogTasks }) => {
           value={task.description}
           setValue={updateTaskField}
         />
-
         <Assignee
           fieldName="assigned"
           value={task.assigned}
           setValue={updateTaskField}
         />
-
         <Priority
           fieldName="priority"
           value={task.priority}
           setValue={updateTaskField}
         />
-
         <Input
           name="date"
           label="Due Date"
@@ -126,7 +132,6 @@ const Form = ({ taskToEdit, setTaskToEdit, backlogTasks, setBacklogTasks }) => {
           value={task.date}
           setValue={updateTaskField}
         />
-
         <div className="form-button-wrapper">
           <button className="all-btn cancel-button" onClick={closeForm}>
             Cancel

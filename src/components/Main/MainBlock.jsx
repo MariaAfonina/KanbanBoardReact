@@ -1,16 +1,18 @@
 import { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import Task from "../Task/Task";
 import UseDragAndDrop from "./UseDragAndDrop";
 import "./MainBlock.css";
 
-const MainBlock = ({ backlogTasks, inProgressTasks, doneTasks }) => {
+const MainBlock = () => {
+  const [backlogTasks, inProgressTasks, doneTasks] = useOutletContext();
   const [taskId, setTaskId] = useState();
   const [taskStatus, setTaskStatus] = useState();
 
   const { onDragOver, onDropTask } = UseDragAndDrop(taskId, taskStatus);
 
   return (
-    <main className="tasks-block">
+    <main className="main-container">
       <div
         data-task-group-status="backlog"
         onDragOver={onDragOver}
